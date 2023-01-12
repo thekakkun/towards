@@ -25,7 +25,7 @@ export default function Map({ stages, position }: MapProps) {
     } else if (svgRef.current) {
       new D3Map(svgRef.current, target, position.coordinates);
     }
-  }, [svgRef, target, position.coordinates]);
+  }, [svgRef]);
 
   const globe = <path id="globe" fill={colors.blue[100]}></path>;
   const countries = (

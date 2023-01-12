@@ -13,7 +13,10 @@ export default function Button(game: ReturnType<typeof useGame>) {
 
 function buttonText({ state: gameState }: ReturnType<typeof useGame>) {
   switch (gameState) {
-    case GameState.Intro:
+    case GameState.Permissions:
+      return "Provide permissions";
+
+    case GameState.Ready:
       return "Start Game";
 
     case GameState.Guess:

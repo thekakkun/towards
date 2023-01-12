@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import Button from "./components/Button";
 import Content from "./components/Content";
 import Game from "./components/game/Game";
@@ -12,29 +10,29 @@ import useStages from "./hooks/useStages";
 
 function App() {
   const position = usePosition();
+
   const stages = useStages();
   const game = useGame(stages, position);
 
-  useEffect(() => {
-    console.log(stages.list);
-  }, [stages.list]);
-
   function getContent() {
-    if (position.coordinates === null || position.heading === null) {
-      return (
-        <>
-          {position.coordinates && <p>Location services are needed</p>}
-          {position.heading && <p>Device orientation services are needed</p>}
-        </>
-      );
-    }
-
-    if (game.state === GameState.Intro) {
-      return <Intro></Intro>;
+    if (
+      game.state === GameState.Permissions ||
+      game.state === GameState.Ready
+    ) {
+      return <Intro {...position}></Intro>;
     } else if (game.state === GameState.Outro) {
       return <Outro {...stages}></Outro>;
     } else {
-      return <Game game={game} position={position} stages={stages}></Game>;
+      return (
+        <Game
+          game={game}
+          position={{
+            coordinates: position.coordinates.value,
+            heading: position.heading.value,
+          }}
+          stages={stages}
+        ></Game>
+      );
     }
   }
 

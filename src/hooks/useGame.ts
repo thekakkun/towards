@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Position } from "../types/game";
 import { getScore } from "../utilities/game";
+import usePosition from "./usePosition";
 import useStages from "./useStages";
 
 export enum GameState {
-  Intro,
+  Permissions,
+  Ready,
   Guess,
   Answer,
   LastAnswer,
@@ -14,24 +15,46 @@ export enum GameState {
 
 export default function useGame(
   stages: ReturnType<typeof useStages>,
-  position: Position
+  position: ReturnType<typeof usePosition>
 ) {
-  const [gameState, setGameState] = useState(GameState.Intro);
+  const [gameState, setGameState] = useState(GameState.Permissions);
+
+  useEffect(() => {
+    if (gameState === GameState.Permissions) {
+      if (position.coordinates.value && position.heading.value) {
+        setGameState(GameState.Ready);
+      } else if (
+        position.coordinates.permission === "granted" &&
+        position.heading.permission === "granted"
+      ) {
+        position.coordinates.requestPermission();
+        position.heading.requestPermission();
+      }
+    }
+  }, [gameState, position.coordinates, position.heading]);
 
   function advance() {
     switch (gameState) {
-      case GameState.Intro:
+      case GameState.Permissions:
+        position.coordinates.requestPermission();
+        position.heading.requestPermission();
+        break;
+
+      case GameState.Ready:
         stages.setNext();
         setGameState(GameState.Guess);
         break;
 
       case GameState.Guess:
-        if (position.heading === null) {
+        if (position.heading.value === null) {
           throw new Error("Heading is null.");
         }
 
-        const score = getScore(stages.current(), position);
-        stages.makeGuess({ heading: position.heading, score });
+        const score = getScore(stages.current(), {
+          coordinates: position.coordinates.value,
+          heading: position.heading.value,
+        });
+        stages.makeGuess({ heading: position.heading.value, score });
 
         if (stages.onFinal()) {
           setGameState(GameState.LastAnswer);
@@ -52,7 +75,7 @@ export default function useGame(
 
       case GameState.Outro:
         stages.reset();
-        setGameState(GameState.Intro);
+        setGameState(GameState.Ready);
         break;
 
       default:
