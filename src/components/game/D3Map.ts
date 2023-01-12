@@ -4,15 +4,15 @@ import {
   geoOrthographic,
   GeoPath,
   geoPath,
-  GeoProjection,
+  GeoProjection
 } from "d3-geo";
 import { pointers, select, Selection } from "d3-selection";
 import versor from "versor";
 
-import geoJson from "../assets/data/ne_110m_admin_0_countries.json";
-import { Coordinates } from "../types/cartography";
-import { CompletedLocation } from "../types/game";
-import { getDestination } from "../utilities/cartography";
+import geoJson from "../../assets/data/ne_110m_admin_0_countries.json";
+import { Coordinates } from "../../types/cartography";
+import { CompletedLocation } from "../../types/game";
+import { getDestination } from "../../utilities/cartography";
 
 /**
  * Draw a map, using D3 in the specified element.

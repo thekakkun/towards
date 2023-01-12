@@ -1,24 +1,29 @@
 import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
 
-import { Coordinates } from "../types/cartography";
-import { CompletedLocation } from "../types/game";
+import useStages from "../../hooks/useStages";
+import { Position } from "../../types/game";
 
 import D3Map from "./D3Map";
 
 interface MapProps {
-  target: CompletedLocation;
-  location: Coordinates;
+  stages: ReturnType<typeof useStages>;
+  position: Position;
 }
 
-let map: D3Map;
-
-export default function Map({ target, location }: MapProps) {
+export default function Map({ stages, position }: MapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
 
+  const target = stages.current();
+  if (!("score" in target)) {
+    throw new Error("stage is unscored.");
+  }
+
   useEffect(() => {
-    if (svgRef.current) {
-      map = new D3Map(svgRef.current, target, location);
+    if (position.coordinates === null) {
+      throw new Error("Coordinates not available.");
+    } else if (svgRef.current) {
+      new D3Map(svgRef.current, target, position.coordinates);
     }
   }, [svgRef]);
 

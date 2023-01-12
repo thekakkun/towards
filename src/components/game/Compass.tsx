@@ -1,5 +1,5 @@
-import compass from "../assets/images/compass.png";
-import { Degrees } from "../types/math";
+import compass from "../../assets/images/compass.png";
+import { Degrees } from "../../types/math";
 
 interface CompassProps {
   heading: Degrees;

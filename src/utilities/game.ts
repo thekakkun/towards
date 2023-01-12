@@ -1,67 +1,64 @@
 import cities from "../assets/data/cities.json";
-import { Coordinates } from "../types/cartography";
-import { CurrentLocation, StageList } from "../types/game";
+import { CurrentLocation, Position, StageList } from "../types/game";
 import { Degrees } from "../types/math";
 import { getBearing } from "./cartography";
-import { getRandomInt } from "./math";
 
-export function getScore(
-  location: Coordinates,
-  heading: Degrees,
-  target: CurrentLocation
-) {
-  if (heading === null) {
+export function getScore(target: CurrentLocation, position: Position, ) {
+  if (position.heading === null) {
     throw Error("Heading not available");
   }
+  if (position.coordinates === null) {
+    throw Error("User position not available.");
+  }
 
-  const bearing = getBearing(location, target);
+  const bearing = getBearing(position.coordinates, target);
   const degreeDelta = Math.min(
-    Math.abs(bearing - heading),
-    360 - Math.abs(bearing - heading)
+    Math.abs(bearing - position.heading),
+    360 - Math.abs(bearing - position.heading)
   );
 
   return Math.round(200 * (1 - degreeDelta / 180));
 }
 
-/**
- * Get a random location.
- * @param currentStages The list of current stages
- * @returns A random location, not in the current stage list.
- */
-export function getLocation(currentStages: StageList = []): CurrentLocation {
-  let candidate: CurrentLocation;
+// /**
+//  * Get a random location.
+//  * @param currentStages The list of current stages
+//  * @returns A random location, not in the current stage list.
+//  */
+// export function getLocation(currentStages: StageList = []): CurrentLocation {
+//   let candidate: CurrentLocation;
 
-  /**
-   * Create a function to compare the candidate with a stage.
-   * Function exists, since a anonymous function raises the
-   * 'no-loop-func' ESLint warning.
-   * @param candidate The candidate location
-   * @returns A function to compare the candidate location with a stage.
-   */
-  function compareCandidate(candidate: CurrentLocation) {
-    return function _candidateChecker({
-      country,
-      city,
-    }: {
-      country: string;
-      city: string;
-    }) {
-      return country === candidate.country && city === candidate.city;
-    };
-  }
+//   /**
+//    * Create a function to compare the candidate with a stage.
+//    * Function exists, since a anonymous function raises the
+//    * 'no-loop-func' ESLint warning.
+//    * @param candidate The candidate location
+//    * @returns A function to compare the candidate location with a stage.
+//    */
+//   function compareCandidate(candidate: CurrentLocation) {
+//     return function _candidateChecker({
+//       country,
+//       city,
+//     }: {
+//       country: string;
+//       city: string;
+//     }) {
+//       return country === candidate.country && city === candidate.city;
+//     };
+//   }
 
-  while (true) {
-    candidate = cities[getRandomInt(0, cities.length)];
+//   while (true) {
+//     candidate = cities[getRandomInt(0, cities.length)];
 
-    if (currentStages.length === 0) {
-      return candidate;
-    } else if (currentStages.filter(compareCandidate(candidate)).length !== 0) {
-      continue;
-    }
+//     if (currentStages.length === 0) {
+//       return candidate;
+//     } else if (currentStages.filter(compareCandidate(candidate)).length !== 0) {
+//       continue;
+//     }
 
-    return candidate;
-  }
-}
+//     return candidate;
+//   }
+// }
 
 /**
  * Get a compass heading, if available, or null
@@ -79,4 +76,22 @@ export function getHeading(event: DeviceOrientationEvent): Degrees | null {
   } else {
     return null;
   }
+}
+
+export function getRandomCity(stages: StageList) {
+  let candidate: CurrentLocation;
+
+  do {
+    candidate = cities[Math.floor(Math.random() * cities.length)];
+  } while (
+    stages.filter((stage) => {
+      return (
+        stage !== null &&
+        stage.country === candidate.country &&
+        stage.city === candidate.city
+      );
+    }).length
+  );
+
+  return candidate;
 }

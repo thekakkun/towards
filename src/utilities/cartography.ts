@@ -6,14 +6,6 @@ import { degToRad, radToDeg } from "./math";
 const R = 6371;
 
 /**
- * Test whether geolocation services are available in the browser.
- * @returns Boolean value indicating availability of the geolocation service.
- */
-export function geolocationAvailable() {
-  return "geolocation" in navigator;
-}
-
-/**
  * Normalize compass bearing to [0, 360] degrees
  * @param bearing Compass bearing in degrees
  * @returns Normalized bearing

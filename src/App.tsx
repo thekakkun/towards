@@ -1,88 +1,38 @@
-import { useEffect, useReducer, useState } from "react";
 import Button from "./components/Button";
 import Content from "./components/Content";
-import Game from "./components/Game";
+import Game from "./components/game/Game";
 import Header from "./components/Header";
 import Intro from "./components/Intro";
 import Outro from "./components/Outro";
-import { Coordinates } from "./types/cartography";
-import { ActionType, Modes, StageList } from "./types/game";
-import { Degrees } from "./types/math";
-import { geolocationAvailable } from "./utilities/cartography";
-import { getHeading, getLocation } from "./utilities/game";
+import useGame, { GameState } from "./hooks/useGame";
+import usePosition from "./hooks/usePosition";
+import useStages from "./hooks/useStages";
 
 function App() {
-  const gameLength = 5;
+  const position = usePosition();
 
-  const [mode, setMode] = useState<Modes>("intro");
-  const [stages, dispatch] = useReducer(stagesReducer, initialStages);
-
-  const [location, setLocation] = useState<Coordinates | null>(null);
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      setLocation({
-        latitude: 43.6532,
-        longitude: -79.3832,
-      });
-    } else if (geolocationAvailable()) {
-      navigator.geolocation.watchPosition(
-        ({ coords: { latitude, longitude } }) => {
-          setLocation({
-            latitude: latitude,
-            longitude: longitude,
-          });
-        }
-      );
-    }
-  }, []);
-
-  const [heading, setHeading] = useState<Degrees | null>(null);
-  useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      setHeading(30);
-    } else if ("ondeviceorientationabsolute" in window) {
-      window.addEventListener("deviceorientationabsolute", (event) => {
-        setHeading(getHeading(event as DeviceOrientationEvent));
-      });
-      return;
-    } else if ("ondeviceorientation" in window) {
-      window.addEventListener("deviceorientation", (event) => {
-        setHeading(getHeading(event));
-      });
-    }
-  }, []);
+  const stages = useStages();
+  const game = useGame(stages, position);
 
   function getContent() {
-    if (location === null) {
-      return <p>Location services are needed</p>;
-    }
-    if (heading === null) {
-      return <p>Device orientation data is needed</p>;
-    }
-
-    switch (mode) {
-      case "intro":
-        return <Intro></Intro>;
-
-      case "guess":
-      case "answer":
-        return (
-          <Game
-            gameLength={gameLength}
-            location={location}
-            heading={heading}
-            mode={mode}
-            stages={stages}
-            dispatch={dispatch}
-          ></Game>
-        );
-
-      case "outro":
-        return <Outro stages={stages}></Outro>;
-
-      default:
-        const _exhaustiveCheck: never = mode;
-        return _exhaustiveCheck;
+    if (
+      game.state === GameState.Permissions ||
+      game.state === GameState.Ready
+    ) {
+      return <Intro {...position}></Intro>;
+    } else if (game.state === GameState.Outro) {
+      return <Outro {...stages}></Outro>;
+    } else {
+      return (
+        <Game
+          game={game}
+          position={{
+            coordinates: position.coordinates.value,
+            heading: position.heading.value,
+          }}
+          stages={stages}
+        ></Game>
+      );
     }
   }
 
@@ -90,49 +40,9 @@ function App() {
     <div className="h-full flex flex-col items-center justify-between pb-4">
       <Header></Header>
       <Content>{getContent()}</Content>
-      {location !== null && heading !== null && (
-        <Button
-          gameLength={gameLength}
-          location={location}
-          heading={heading}
-          mode={mode}
-          setMode={setMode}
-          stages={stages}
-          dispatch={dispatch}
-        ></Button>
-      )}
+      <Button {...game}></Button>
     </div>
   );
-}
-
-const initialStages: StageList = [];
-function stagesReducer(state: typeof initialStages, action: ActionType) {
-  switch (action.type) {
-    case "next":
-      return [...state, getLocation(action.payload)];
-
-    case "reroll":
-      return [...state.slice(0, -1), getLocation(action.payload)];
-
-    case "guess":
-      if (state.length === 0) {
-        throw Error("No stages");
-      }
-
-      const currentStage = state[state.length - 1];
-      if ("heading" in currentStage || "score" in currentStage) {
-        throw Error("Current stage already has a guess");
-      }
-
-      return [...state.slice(0, -1), { ...currentStage, ...action.payload }];
-
-    case "restart":
-      return initialStages;
-
-    default:
-      const _exhaustiveCheck: never = action;
-      return _exhaustiveCheck;
-  }
 }
 
 export default App;
