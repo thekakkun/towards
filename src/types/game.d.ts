@@ -10,6 +10,13 @@ export type gameState =
   | "lastAnswer"
   | "outro";
 
+export type positionStatus =
+  | "unavailable"
+  | "unknown"
+  | "denied"
+  | "acquiring"
+  | "ready";
+
 export interface Position {
   coordinates: Coordinates | null;
   heading: Degrees | null;
