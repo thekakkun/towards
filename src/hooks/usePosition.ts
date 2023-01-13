@@ -1,23 +1,43 @@
 import { useEffect, useState } from "react";
 import { Coordinates } from "../types/cartography";
+import { positionStatus } from "../types/game";
 import { Degrees } from "../types/math";
 
 export default function usePosition() {
-  let coordinates = useCoordinates();
-  let heading = useHeading();
+  const coordinates = useCoordinates();
+  const heading = useHeading();
+  const [status, setStatus] = useState<positionStatus>("unavailable");
 
   useEffect(() => {
-    console.log(`Position status:
-    Coordinates availability: ${coordinates.availability}
-    Coordinates permission: ${coordinates.permission}
-    Heading availability: ${heading.availability}
-    Heading availability: ${heading.permission}`);
-  }, [coordinates, heading]);
+    console.log(`Position status: ${status}
+  Coordinates:
+    availability: ${coordinates.availability}
+    permission: ${coordinates.permission}
+    value: ${coordinates.value?.latitude}, ${coordinates.value?.longitude}
+  Heading:
+    availability: ${heading.availability}
+    permission: ${heading.permission}
+    value: ${heading.value}`);
+  }, [coordinates, heading, status]);
 
   useEffect(() => {
-    console.log(`Position data:
-    Coordinates: ${coordinates.value?.latitude}, ${coordinates.value?.longitude}
-    Heading: ${heading.value}`);
+    if (coordinates.value && heading.value) {
+      setStatus("ready");
+    } else if (
+      coordinates.permission === "granted" &&
+      heading.permission === "granted"
+    ) {
+      if (!coordinates.value || !heading.value) {
+        setStatus("acquiring");
+      }
+    } else if (
+      coordinates.permission === "denied" ||
+      heading.permission === "denied"
+    ) {
+      setStatus("denied");
+    } else if (coordinates.availability && heading.availability) {
+      setStatus("unknown");
+    }
   }, [coordinates, heading]);
 
   return {
@@ -35,19 +55,19 @@ function useCoordinates() {
   }, []);
 
   // geolocation permissions
-  const [permission, setPermission] = useState<PermissionState>("denied");
+  const [permission, setPermission] = useState<PermissionState>("prompt");
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   useEffect(() => {
     navigator.permissions
       .query({ name: "geolocation" })
-      .then((res) => setPermission(res.state));
+      .then((res) =>
+        res.addEventListener("change", () => setPermission(res.state))
+      );
   }, []);
 
   let watchId: number = 0;
   function requestPermission() {
     if (availability) {
-      console.log("watching geolocation permission");
-      setPermission("granted");
       watchId = navigator.geolocation.watchPosition(
         (pos) => {
           setCoordinates(pos.coords);
@@ -61,7 +81,6 @@ function useCoordinates() {
 
   useEffect(() => {
     function revokePermission() {
-      console.log("No!");
       navigator.geolocation.clearWatch(watchId);
     }
 
@@ -82,6 +101,7 @@ interface WebkitDeviceOrientationEvent extends DeviceOrientationEvent {
 function useHeading() {
   const [availability, setAvailability] = useState(false);
   useEffect(() => {
+    // FIX: shows as true on desktop chrome
     const androidAvailability = "ondeviceorientationabsolute" in window;
     const iosAvailability =
       "ondeviceorientation" in window &&
