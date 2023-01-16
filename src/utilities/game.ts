@@ -3,7 +3,7 @@ import { CurrentLocation, Position, StageList } from "../types/game";
 import { Degrees } from "../types/math";
 import { getBearing } from "./cartography";
 
-export function getScore(target: CurrentLocation, position: Position, ) {
+export function getScore(target: CurrentLocation, position: Position) {
   if (position.heading === null) {
     throw Error("Heading not available");
   }
@@ -81,17 +81,21 @@ export function getHeading(event: DeviceOrientationEvent): Degrees | null {
 export function getRandomCity(stages: StageList) {
   let candidate: CurrentLocation;
 
+  function candidateInStages(): boolean {
+    return Boolean(
+      stages.filter((stage) => {
+        return (
+          stage !== null &&
+          stage.country === candidate.country &&
+          stage.city === candidate.city
+        );
+      }).length
+    );
+  }
+
   do {
     candidate = cities[Math.floor(Math.random() * cities.length)];
-  } while (
-    stages.filter((stage) => {
-      return (
-        stage !== null &&
-        stage.country === candidate.country &&
-        stage.city === candidate.city
-      );
-    }).length
-  );
+  } while (candidateInStages());
 
   return candidate;
 }

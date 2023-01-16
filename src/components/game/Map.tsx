@@ -25,6 +25,8 @@ export default function Map({ stages, position }: MapProps) {
     } else if (svgRef.current) {
       new D3Map(svgRef.current, target, position.coordinates);
     }
+    // TODO: Fix this!!!
+    // eslint-disable-next-line
   }, [svgRef]);
 
   const globe = <path id="globe" fill={colors.blue[100]}></path>;
