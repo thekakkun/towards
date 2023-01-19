@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Coordinates } from "../types/cartography";
+import { SensorState } from "../types/game";
 
 /**
  * On being called, checks for geolocation service availability
@@ -8,83 +9,72 @@ import { Coordinates } from "../types/cartography";
  * and the coordinate value.
  */
 export default function useCoordinates(): {
-  state: PermissionState | null;
+  state: SensorState;
   requestAccess: () => void;
   value: Coordinates | null;
 } {
-  const permissionState = usePermissionState();
+  const [sensorState, setSensorState] = useState<SensorState>("unknown");
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
 
-  //  On initialization, check for availability of geolocation services.
+  // Check geolocation availability and listen for state on load.
   useEffect(() => {
     if (!("geolocation" in navigator)) {
-      throw new Error("Geolocation services not supported.");
+      setSensorState("unavailable");
+    } else {
+      attachListener();
+    }
+
+    async function attachListener() {
+      let res = await navigator.permissions.query({ name: "geolocation" });
+      setSensorState(res.state);
+
+      res.addEventListener("change", () => {
+        setSensorState(res.state);
+      });
     }
   }, []);
 
-  // On get coordinates if permission already granted.
+  // Monitor sensor state and
   useEffect(() => {
-    if (permissionState === "granted") {
-      const watchId = watchCoordinates();
+    console.log(`Coordinates:
+  permission state: ${sensorState}
+  value: (${coordinates?.latitude}, ${coordinates?.longitude})`);
+
+    if (coordinates !== null) {
+      setSensorState("ready");
+    } else if (sensorState === "granted") {
+      const watchId = requestAccess();
 
       return () => {
         navigator.geolocation.clearWatch(watchId);
       };
     }
-  }, [permissionState]);
+  }, [sensorState, coordinates]);
 
   /**
    * Will prompt user for permission if not 'granted'.
    * Once granted, start monitoring the geolocation.
    */
   function requestAccess() {
-    const watchId = watchCoordinates();
-
-    useEffect(() => {
-      return () => {
-        navigator.geolocation.clearWatch(watchId);
-      };
-    }, []);
-  }
-
-  /**
-   * Start monitoring user coordinates, update coordinate state.
-   */
-  function watchCoordinates() {
     const watchId = navigator.geolocation.watchPosition(
-      ({ coords }) => setCoordinates(coords),
+      ({ coords }) => {
+        setCoordinates(coords);
+      },
       (err) => {
-        throw err;
+        console.log(`Geolocation position error: ${err.code} ${err.message}`);
+        if (err.code === 1) {
+          setSensorState("denied");
+        } else {
+          setSensorState("unavailable");
+        }
       }
     );
     return watchId;
   }
 
-  return { state: permissionState, requestAccess, value: coordinates };
-}
-
-/**
- * Stores Geolocation API permission state in a React state variable.
- * Updates automatically on change.
- *
- * @returns permission state of the Geolocation API
- */
-function usePermissionState(): PermissionState | null {
-  const [permissionState, setPermissionState] =
-    useState<PermissionState | null>(null);
-
-  useEffect(() => {
-    async function attachListener() {
-      let res = await navigator.permissions.query({ name: "geolocation" });
-      setPermissionState(res.state);
-
-      res.addEventListener("change", () => {
-        setPermissionState(res.state);
-      });
-    }
-
-    attachListener();
-  }, []);
-
-  return permissionState;
+  return {
+    state: sensorState,
+    requestAccess,
+    value: coordinates,
+  };
 }

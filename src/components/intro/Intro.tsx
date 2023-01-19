@@ -1,6 +1,11 @@
-import usePosition from "../hooks/usePosition";
+import useCoordinates from "../../hooks/useCoordinates";
+import usePosition from "../../hooks/usePosition";
+
+import CoordinatesInfo from "./CoordinatesInfo";
 
 export default function Intro(position: ReturnType<typeof usePosition>) {
+  const coordinates = useCoordinates();
+
   return (
     <div className="">
       <p>
@@ -8,22 +13,16 @@ export default function Intro(position: ReturnType<typeof usePosition>) {
         the target city.
       </p>
 
-      {/* <h2 className="text-lg font-bold">How to play:</h2>
-      <ul className="list-disc list-inside">
-        <li>5 cities, 200 points each, GO!</li>
-        <li>
-          If you're not sure where the city is, you can re-roll up to 3 times
-          per game.
-        </li>
-      </ul> */}
-
       <h2 className="text-lg font-bold mt-3">Requirements:</h2>
       <p>
         Being a location-based geograpy game, permission to access the following
         information is needed:
       </p>
-      <ul className="list-disc list-inside">
-        <li>Geolocation (where you currently are)</li>
+
+      <ul className="list-inside">
+        <li>
+          <CoordinatesInfo {...coordinates}></CoordinatesInfo>
+        </li>
         <li>Orientation (which way you're facing)</li>
       </ul>
       <p>

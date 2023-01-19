@@ -1,9 +1,25 @@
 import { useEffect, useState } from "react";
 import { Degrees } from "../types/math";
 
-export default function useHeading() {
+/**
+ * On being called, checks for orientation service availability
+ * and adds a listener for geolocation permission state.
+ * @returns Permission state, a method to request permission and start listening,
+ * and the coordinate value.
+ */
+export default function useHeading(): {
+  state: PermissionState;
+  requestAccess: () => Promise<void>;
+  value: number | null;
+} {
   const [permissionState, setPermissionState] = usePermissionState();
   const [heading, setHeading] = useState<Degrees | null>(null);
+
+  // useEffect(() => {
+  //   console.log(`Heading:
+  // permission state: ${permissionState}
+  // value: ${heading}`);
+  // }, [permissionState, heading]);
 
   // On initialization, check for availability of orientation services
   useEffect(() => {
@@ -17,7 +33,7 @@ export default function useHeading() {
     }
   });
 
-  // On get coordinates if permission already granted.
+  // Get Heading if permission already granted.
   useEffect(() => {
     if (permissionState === "granted") {
       watchHeading();
@@ -57,10 +73,10 @@ export default function useHeading() {
         "deviceorientationabsolute" as "deviceorientation",
         onDeviceOrientation
       );
-    } else if ("deviceorientation" in window) {
+    } else if ("ondeviceorientation" in window) {
       window.addEventListener("deviceorientation", onDeviceOrientation);
     } else {
-      throw new Error("Device orientation not supported.");
+      throw new Error("Device orientatsupportedion not .");
     }
   }
 

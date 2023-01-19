@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { Coordinates } from "../types/cartography";
-import { positionStatus } from "../types/game";
+import { SensorState } from "../types/game";
 import { Degrees } from "../types/math";
 
 export default function usePosition() {
   const coordinates = useCoordinates();
   const heading = useHeading();
-  const [status, setStatus] = useState<positionStatus>("unavailable");
+  const [status, setStatus] = useState<SensorState>("unavailable");
 
-  useEffect(() => {
-    console.log(`Position status: ${status}
-  Coordinates:
-    availability: ${coordinates.availability}
-    permission: ${coordinates.permission}
-    value: ${coordinates.value?.latitude}, ${coordinates.value?.longitude}
-  Heading:
-    availability: ${heading.availability}
-    permission: ${heading.permission}
-    value: ${heading.value}`);
-  }, [coordinates, heading, status]);
+  // useEffect(() => {
+  //   console.log(`Position status: ${status}
+  // Coordinates:
+  //   availability: ${coordinates.availability}
+  //   permission: ${coordinates.permission}
+  //   value: ${coordinates.value?.latitude}, ${coordinates.value?.longitude}
+  // Heading:
+  //   availability: ${heading.availability}
+  //   permission: ${heading.permission}
+  //   value: ${heading.value}`);
+  // }, [coordinates, heading, status]);
 
   useEffect(() => {
     if (coordinates.value && heading.value) {
@@ -28,7 +28,7 @@ export default function usePosition() {
       heading.permission === "granted"
     ) {
       if (!coordinates.value || !heading.value) {
-        setStatus("acquiring");
+        setStatus("prompt");
       }
     } else if (
       coordinates.permission === "denied" ||

@@ -10,12 +10,7 @@ export type gameState =
   | "lastAnswer"
   | "outro";
 
-export type positionStatus =
-  | "unavailable"
-  | "unknown"
-  | "denied"
-  | "acquiring"
-  | "ready";
+export type SensorState = "unknown" | "unavailable" | PermissionState | "ready";
 
 export interface Position {
   coordinates: Coordinates | null;

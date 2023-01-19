@@ -2,14 +2,17 @@ import Button from "./components/Button";
 import Content from "./components/Content";
 import Game from "./components/game/Game";
 import Header from "./components/Header";
-import Intro from "./components/Intro";
+import Intro from "./components/intro/Intro";
 import Outro from "./components/Outro";
+import useCoordinates from "./hooks/useCoordinates";
 import useGame, { GameState } from "./hooks/useGame";
+import useHeading from "./hooks/useHeading";
 import usePosition from "./hooks/usePosition";
 import useStages from "./hooks/useStages";
 
 function App() {
   const position = usePosition();
+  const heading = useHeading();
 
   const stages = useStages();
   const game = useGame(stages, position);
