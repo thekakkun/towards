@@ -52,14 +52,7 @@ export default function useHeading(): {
   // Should be on load for Android, after requestAccess() is called for iOS.
   useEffect(() => {
     if (sensorState === "granted") {
-      if ("ondeviceorientationabsolute" in window) {
-        window.addEventListener(
-          "deviceorientationabsolute" as "deviceorientation",
-          onDeviceOrientation
-        );
-      } else if ("ondeviceorientation" in window) {
-        window.addEventListener("deviceorientation", onDeviceOrientation);
-      }
+      requestAccess();
 
       // if (heading === null) {
       //   if (process.env.NODE_ENV === "development") {
@@ -69,12 +62,12 @@ export default function useHeading(): {
       //   }
       // }
 
-      return "ondeviceorientationabsolute" in window
-        ? window.removeEventListener(
-            "deviceorientationabsolute" as "deviceorientation",
-            onDeviceOrientation
-          )
-        : window.removeEventListener("deviceorientation", onDeviceOrientation);
+      // return "ondeviceorientationabsolute" in window
+      //   ? window.removeEventListener(
+      //       "deviceorientationabsolute" as "deviceorientation",
+      //       onDeviceOrientation
+      //     )
+      //   : window.removeEventListener("deviceorientation", onDeviceOrientation);
     }
   }, [sensorState, heading]);
 
@@ -100,6 +93,15 @@ export default function useHeading(): {
         console.log(`Device orientation error: ${err}`);
         setSensorState("unavailable");
       }
+    }
+
+    if ("ondeviceorientationabsolute" in window) {
+      window.addEventListener(
+        "deviceorientationabsolute" as "deviceorientation",
+        onDeviceOrientation
+      );
+    } else if ("ondeviceorientation" in window) {
+      window.addEventListener("deviceorientation", onDeviceOrientation);
     }
   }
 
