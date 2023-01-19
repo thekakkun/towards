@@ -18,7 +18,7 @@ export default function useHeading(): {
 
   // Print for debugging purposes.
   useEffect(() => {
-    alert(`Heading:
+    console.log(`Heading:
   permission state: ${sensorState}
   value: ${heading}`);
   }, [sensorState, heading]);
