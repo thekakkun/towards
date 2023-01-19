@@ -18,7 +18,7 @@ export default function useHeading(): {
 
   // Print for debugging purposes.
   useEffect(() => {
-    console.log(`Heading:
+    alert(`Heading:
   permission state: ${sensorState}
   value: ${heading}`);
   }, [sensorState, heading]);
@@ -51,6 +51,7 @@ export default function useHeading(): {
   // Implicitly access heading data if permission granted.
   useEffect(() => {
     if (sensorState === "granted") {
+      alert('attaching listener');
       if ("ondeviceorientationabsolute" in window) {
         window.addEventListener(
           "deviceorientationabsolute" as "deviceorientation",
@@ -59,10 +60,6 @@ export default function useHeading(): {
       } else if ("ondeviceorientation" in window) {
         window.addEventListener("deviceorientation", onDeviceOrientation);
       }
-
-      // if (heading === null) {
-      //   setSensorState("unavailable");
-      // }
 
       return "ondeviceorientationabsolute" in window
         ? window.removeEventListener(
