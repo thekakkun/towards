@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SensorState } from "../types/game";
 import { Degrees } from "../types/math";
 
@@ -48,40 +48,7 @@ export default function useHeading(): {
     }
   }, []);
 
-  // Access heading data once permission granted.
-  // Should be on load for Android, after requestAccess() is called for iOS.
-  useEffect(() => {
-    if (sensorState === "granted") {
-      requestAccess();
-
-      // if (heading === null) {
-      //   if (process.env.NODE_ENV === "development") {
-      //     setHeading(30);
-      //   } else {
-      //     setSensorState("unavailable");
-      //   }
-      // }
-
-      // return "ondeviceorientationabsolute" in window
-      //   ? window.removeEventListener(
-      //       "deviceorientationabsolute" as "deviceorientation",
-      //       onDeviceOrientation
-      //     )
-      //   : window.removeEventListener("deviceorientation", onDeviceOrientation);
-    }
-  }, [sensorState, heading]);
-
-  // Coordinates ready.
-  useEffect(() => {
-    if (heading !== null) {
-      setSensorState("ready");
-    }
-  }, [heading]);
-
-  /**
-   * Prompt user for permission. Update state based on results.
-   */
-  async function requestAccess() {
+  const requestAccess = useCallback(async () => {
     const requestHeadingPermission = (
       DeviceOrientationEvent as unknown as webkitDeviceOrientationEvent
     ).requestPermission;
@@ -103,7 +70,66 @@ export default function useHeading(): {
     } else if ("ondeviceorientation" in window) {
       window.addEventListener("deviceorientation", onDeviceOrientation);
     }
-  }
+  }, []);
+
+  // Access heading data once permission granted.
+  // Should be on load for Android, after requestAccess() is called for iOS.
+  useEffect(() => {
+    if (sensorState === "granted") {
+      requestAccess();
+
+      // if (heading === null) {
+      //   if (process.env.NODE_ENV === "development") {
+      //     setHeading(30);
+      //   } else {
+      //     setSensorState("unavailable");
+      //   }
+      // }
+
+      // return "ondeviceorientationabsolute" in window
+      //   ? window.removeEventListener(
+      //       "deviceorientationabsolute" as "deviceorientation",
+      //       onDeviceOrientation
+      //     )
+      //   : window.removeEventListener("deviceorientation", onDeviceOrientation);
+    }
+  }, [sensorState, requestAccess]);
+
+  // Coordinates ready.
+  useEffect(() => {
+    if (heading !== null) {
+      setSensorState("ready");
+    }
+  }, [heading]);
+
+  /**
+   * Prompt user for permission. Update state based on results.
+   */
+
+  
+  // async function requestAccess() {
+  //   const requestHeadingPermission = (
+  //     DeviceOrientationEvent as unknown as webkitDeviceOrientationEvent
+  //   ).requestPermission;
+
+  //   if (typeof requestHeadingPermission === "function") {
+  //     try {
+  //       setSensorState(await requestHeadingPermission());
+  //     } catch (err) {
+  //       console.log(`Device orientation error: ${err}`);
+  //       setSensorState("unavailable");
+  //     }
+  //   }
+
+  //   if ("ondeviceorientationabsolute" in window) {
+  //     window.addEventListener(
+  //       "deviceorientationabsolute" as "deviceorientation",
+  //       onDeviceOrientation
+  //     );
+  //   } else if ("ondeviceorientation" in window) {
+  //     window.addEventListener("deviceorientation", onDeviceOrientation);
+  //   }
+  // }
 
   /**
    * Attempt to set the heading based on information available from the event.
