@@ -8,17 +8,9 @@ export default function usePosition() {
   const heading = useHeading();
   const [status, setStatus] = useState<SensorState>("unavailable");
 
-  // useEffect(() => {
-  //   console.log(`Position status: ${status}
-  // Coordinates:
-  //   availability: ${coordinates.availability}
-  //   permission: ${coordinates.permission}
-  //   value: ${coordinates.value?.latitude}, ${coordinates.value?.longitude}
-  // Heading:
-  //   availability: ${heading.availability}
-  //   permission: ${heading.permission}
-  //   value: ${heading.value}`);
-  // }, [coordinates, heading, status]);
+  useEffect(() => {
+    console.log(`Position status: ${status}`);
+  }, [status]);
 
   useEffect(() => {
     if (coordinates.value && heading.value) {

@@ -71,7 +71,7 @@ export default function useHeading(): {
           )
         : window.removeEventListener("deviceorientation", onDeviceOrientation);
     }
-  }, [sensorState]);
+  }, [sensorState, heading]);
 
   // Coordinates ready.
   useEffect(() => {
