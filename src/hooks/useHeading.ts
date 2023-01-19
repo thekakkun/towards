@@ -48,7 +48,8 @@ export default function useHeading(): {
     }
   }, []);
 
-  // Implicitly access heading data if permission granted.
+  // Access heading data once permission granted.
+  // Should be on load for Android, after requestAccess() is called for iOS.
   useEffect(() => {
     if (sensorState === "granted") {
       if ("ondeviceorientationabsolute" in window) {
@@ -60,13 +61,13 @@ export default function useHeading(): {
         window.addEventListener("deviceorientation", onDeviceOrientation);
       }
 
-      if (heading === null) {
-        if (process.env.NODE_ENV === "development") {
-          setHeading(30);
-        } else {
-          setSensorState("unavailable");
-        }
-      }
+      // if (heading === null) {
+      //   if (process.env.NODE_ENV === "development") {
+      //     setHeading(30);
+      //   } else {
+      //     setSensorState("unavailable");
+      //   }
+      // }
 
       return "ondeviceorientationabsolute" in window
         ? window.removeEventListener(
@@ -109,10 +110,10 @@ export default function useHeading(): {
   function onDeviceOrientation(
     orientation: DeviceOrientationEvent | webkitDeviceOrientationEvent
   ) {
+    alert(`listener called. Alpha: ${orientation.alpha}`);
     if ("webkitCompassHeading" in orientation) {
       setHeading(orientation.webkitCompassHeading);
     } else if (orientation.absolute && orientation.alpha) {
-      alert(`listener called. Alpha: ${orientation.alpha}`);
       setHeading(359 - orientation.alpha);
     } else {
       setSensorState("unavailable");
