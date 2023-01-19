@@ -60,9 +60,9 @@ export default function useHeading(): {
         window.addEventListener("deviceorientation", onDeviceOrientation);
       }
 
-      if (heading === null) {
-        setSensorState("unavailable");
-      }
+      // if (heading === null) {
+      //   setSensorState("unavailable");
+      // }
 
       return "ondeviceorientationabsolute" in window
         ? window.removeEventListener(
