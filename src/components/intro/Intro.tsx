@@ -1,10 +1,13 @@
 import useCoordinates from "../../hooks/useCoordinates";
+import useHeading from "../../hooks/useHeading";
 import usePosition from "../../hooks/usePosition";
 
 import CoordinatesInfo from "./CoordinatesInfo";
+import HeadingInfo from "./HeadingInfo";
 
 export default function Intro(position: ReturnType<typeof usePosition>) {
   const coordinates = useCoordinates();
+  const heading = useHeading();
 
   return (
     <div className="">
@@ -23,7 +26,9 @@ export default function Intro(position: ReturnType<typeof usePosition>) {
         <li>
           <CoordinatesInfo {...coordinates}></CoordinatesInfo>
         </li>
-        <li>Orientation (which way you're facing)</li>
+        <li>
+          <HeadingInfo {...heading}></HeadingInfo>
+        </li>
       </ul>
       <p>
         No user data will be collected by the game or shared with third-parties.

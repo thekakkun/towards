@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { SensorState } from "../types/game";
 import { Degrees } from "../types/math";
 
 /**
@@ -8,41 +9,79 @@ import { Degrees } from "../types/math";
  * and the coordinate value.
  */
 export default function useHeading(): {
-  state: PermissionState;
+  state: SensorState;
   requestAccess: () => Promise<void>;
   value: number | null;
 } {
-  const [permissionState, setPermissionState] = usePermissionState();
+  const [sensorState, setSensorState] = useState<SensorState>("unknown");
   const [heading, setHeading] = useState<Degrees | null>(null);
 
-  // useEffect(() => {
-  //   console.log(`Heading:
-  // permission state: ${permissionState}
-  // value: ${heading}`);
-  // }, [permissionState, heading]);
+  // Print for debugging purposes.
+  useEffect(() => {
+    console.log(`Heading:
+  permission state: ${sensorState}
+  value: ${heading}`);
+  }, [sensorState, heading]);
 
-  // On initialization, check for availability of orientation services
+  // On initialization, check for availability,
+  // set initial permission state based on permission endpoint availability.
   useEffect(() => {
     if (
-      !(
-        "ondeviceorientation" in window ||
-        "ondeviceorientationabsolute" in window
-      )
+      !("ondeviceorientation" in window) &&
+      !("ondeviceorientationabsolute" in window)
     ) {
-      throw new Error("Device orientation not supported.");
-    }
-  });
+      setSensorState("unavailable");
+    } else {
+      const requestHeadingPermission = (
+        DeviceOrientationEvent as unknown as webkitDeviceOrientationEvent
+      ).requestPermission;
 
-  // Get Heading if permission already granted.
-  useEffect(() => {
-    if (permissionState === "granted") {
-      watchHeading();
+      // No permission endpoint. Assume permission granted.
+      // This is the case for Chrome.
+      if (typeof requestHeadingPermission !== "function") {
+        setSensorState("granted");
+      }
+      // There is a method to request permission. User needs to be prompted.
+      else {
+        setSensorState("prompt");
+      }
     }
-  }, [permissionState]);
+  }, []);
+
+  // Implicitly access heading data if permission granted.
+  useEffect(() => {
+    if (sensorState === "granted") {
+      if ("ondeviceorientationabsolute" in window) {
+        window.addEventListener(
+          "deviceorientationabsolute" as "deviceorientation",
+          onDeviceOrientation
+        );
+      } else if ("ondeviceorientation" in window) {
+        window.addEventListener("deviceorientation", onDeviceOrientation);
+      }
+
+      if (heading === null) {
+        setSensorState("unavailable");
+      }
+
+      return "ondeviceorientationabsolute" in window
+        ? window.removeEventListener(
+            "deviceorientationabsolute" as "deviceorientation",
+            onDeviceOrientation
+          )
+        : window.removeEventListener("deviceorientation", onDeviceOrientation);
+    }
+  }, [sensorState]);
+
+  // Coordinates ready.
+  useEffect(() => {
+    if (heading !== null) {
+      setSensorState("ready");
+    }
+  }, [heading]);
 
   /**
-   * Will prompt user for permission if not 'granted'.
-   * Once granted, start monitoring the heading.
+   * Prompt user for permission. Update state based on results.
    */
   async function requestAccess() {
     const requestHeadingPermission = (
@@ -51,32 +90,11 @@ export default function useHeading(): {
 
     if (typeof requestHeadingPermission === "function") {
       try {
-        setPermissionState(await requestHeadingPermission());
+        setSensorState(await requestHeadingPermission());
       } catch (err) {
-        throw err;
+        console.log(`Device orientation error: ${err}`);
+        setSensorState("unavailable");
       }
-    }
-
-    if (permissionState !== "granted") {
-      throw new Error("Orientation permissions rejected.");
-    } else {
-      watchHeading();
-    }
-  }
-
-  /**
-   * Attach event listener for orientation, based on what is available.
-   */
-  function watchHeading() {
-    if ("ondeviceorientationabsolute" in window) {
-      window.addEventListener(
-        "deviceorientationabsolute" as "deviceorientation",
-        onDeviceOrientation
-      );
-    } else if ("ondeviceorientation" in window) {
-      window.addEventListener("deviceorientation", onDeviceOrientation);
-    } else {
-      throw new Error("Device orientatsupportedion not .");
     }
   }
 
@@ -92,46 +110,11 @@ export default function useHeading(): {
     } else if (orientation.absolute && orientation.alpha) {
       setHeading(359 - orientation.alpha);
     } else {
-      throw new Error("Could not get compass heading");
+      setSensorState("unavailable");
     }
   }
 
-  return { state: permissionState, requestAccess, value: heading };
-}
-
-/**
- * Stores orientation permission state in a React state variable.
- * Updates automatically on change.
- *
- * Note: Does not take Sensors API into consideration, due to lack of support
- * at time of development.
- *
- * @returns permission state of the Geolocation API
- */
-function usePermissionState(): [
-  PermissionState,
-  React.Dispatch<React.SetStateAction<PermissionState>>
-] {
-  const [permissionState, setPermissionState] =
-    useState<PermissionState>("denied");
-
-  useEffect(() => {
-    const requestHeadingPermission = (
-      DeviceOrientationEvent as unknown as webkitDeviceOrientationEvent
-    ).requestPermission;
-
-    // No method to request permission. Assume permission granted.
-    // This is the case for Chrome.
-    if (typeof requestHeadingPermission !== "function") {
-      setPermissionState("granted");
-    }
-    // There is a method to request permission. User needs to be prompted.
-    else {
-      setPermissionState("prompt");
-    }
-  }, []);
-
-  return [permissionState, setPermissionState];
+  return { state: sensorState, requestAccess, value: heading };
 }
 
 /**

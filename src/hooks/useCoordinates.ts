@@ -16,7 +16,15 @@ export default function useCoordinates(): {
   const [sensorState, setSensorState] = useState<SensorState>("unknown");
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
 
-  // Check geolocation availability and listen for state on load.
+  // Print for debugging purposes.
+  useEffect(() => {
+    console.log(`Coordinates:
+  permission state: ${sensorState}
+  value: (${coordinates?.latitude}, ${coordinates?.longitude})`);
+  }, [sensorState, coordinates]);
+
+  // On initialization, check for availability,
+  // start listening to permission state if available.
   useEffect(() => {
     if (!("geolocation" in navigator)) {
       setSensorState("unavailable");
@@ -24,6 +32,9 @@ export default function useCoordinates(): {
       attachListener();
     }
 
+    /**
+     * Start listening to geolocation permission state.
+     */
     async function attachListener() {
       let res = await navigator.permissions.query({ name: "geolocation" });
       setSensorState(res.state);
@@ -34,25 +45,26 @@ export default function useCoordinates(): {
     }
   }, []);
 
-  // Monitor sensor state and
+  // Implicitly access coordinates data if permission already granted.
   useEffect(() => {
-    console.log(`Coordinates:
-  permission state: ${sensorState}
-  value: (${coordinates?.latitude}, ${coordinates?.longitude})`);
-
-    if (coordinates !== null) {
-      setSensorState("ready");
-    } else if (sensorState === "granted") {
+    if (sensorState === "granted") {
       const watchId = requestAccess();
 
       return () => {
         navigator.geolocation.clearWatch(watchId);
       };
     }
-  }, [sensorState, coordinates]);
+  }, [sensorState]);
+
+  // Coordinates ready.
+  useEffect(() => {
+    if (coordinates !== null) {
+      setSensorState("ready");
+    }
+  }, [coordinates]);
 
   /**
-   * Will prompt user for permission if not 'granted'.
+   * Prompt user for permission if not 'granted'.
    * Once granted, start monitoring the geolocation.
    */
   function requestAccess() {
