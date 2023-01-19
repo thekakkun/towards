@@ -48,7 +48,27 @@ export default function useHeading(): {
     }
   }, []);
 
-  const requestAccess = useCallback(async () => {
+  const requestAccess = useCallback(requestAccessAsync, []);
+
+  // Access heading data once permission granted.
+  // Should be on load for Android, after requestAccess() is called for iOS.
+  useEffect(() => {
+    if (sensorState === "granted") {
+      requestAccess();
+    }
+  }, [sensorState, requestAccess]);
+
+  // Coordinates ready.
+  useEffect(() => {
+    if (heading !== null) {
+      setSensorState("ready");
+    }
+  }, [heading]);
+
+  /**
+   * Prompt user for permission. Update state based on results.
+   */
+  async function requestAccessAsync() {
     const requestHeadingPermission = (
       DeviceOrientationEvent as unknown as webkitDeviceOrientationEvent
     ).requestPermission;
@@ -70,66 +90,11 @@ export default function useHeading(): {
     } else if ("ondeviceorientation" in window) {
       window.addEventListener("deviceorientation", onDeviceOrientation);
     }
-  }, []);
 
-  // Access heading data once permission granted.
-  // Should be on load for Android, after requestAccess() is called for iOS.
-  useEffect(() => {
-    if (sensorState === "granted") {
-      requestAccess();
-
-      // if (heading === null) {
-      //   if (process.env.NODE_ENV === "development") {
-      //     setHeading(30);
-      //   } else {
-      //     setSensorState("unavailable");
-      //   }
-      // }
-
-      // return "ondeviceorientationabsolute" in window
-      //   ? window.removeEventListener(
-      //       "deviceorientationabsolute" as "deviceorientation",
-      //       onDeviceOrientation
-      //     )
-      //   : window.removeEventListener("deviceorientation", onDeviceOrientation);
-    }
-  }, [sensorState, requestAccess]);
-
-  // Coordinates ready.
-  useEffect(() => {
-    if (heading !== null) {
-      setSensorState("ready");
-    }
-  }, [heading]);
-
-  /**
-   * Prompt user for permission. Update state based on results.
-   */
-
-  
-  // async function requestAccess() {
-  //   const requestHeadingPermission = (
-  //     DeviceOrientationEvent as unknown as webkitDeviceOrientationEvent
-  //   ).requestPermission;
-
-  //   if (typeof requestHeadingPermission === "function") {
-  //     try {
-  //       setSensorState(await requestHeadingPermission());
-  //     } catch (err) {
-  //       console.log(`Device orientation error: ${err}`);
-  //       setSensorState("unavailable");
-  //     }
-  //   }
-
-  //   if ("ondeviceorientationabsolute" in window) {
-  //     window.addEventListener(
-  //       "deviceorientationabsolute" as "deviceorientation",
-  //       onDeviceOrientation
-  //     );
-  //   } else if ("ondeviceorientation" in window) {
-  //     window.addEventListener("deviceorientation", onDeviceOrientation);
-  //   }
-  // }
+    // For cases where event listeners exists, but alpha/compassHeading value is null.
+    // Should be overwritten once heading value is non-null
+    setSensorState("unavailable");
+  }
 
   /**
    * Attempt to set the heading based on information available from the event.
@@ -138,7 +103,6 @@ export default function useHeading(): {
   function onDeviceOrientation(
     orientation: DeviceOrientationEvent | webkitDeviceOrientationEvent
   ) {
-    alert(`listener called. Alpha: ${orientation.alpha}`);
     if ("webkitCompassHeading" in orientation) {
       setHeading(orientation.webkitCompassHeading);
     } else if (orientation.absolute && orientation.alpha) {
