@@ -17,7 +17,7 @@ export default function Outro(stages: ReturnType<typeof useStages>) {
         )}/1000`}
       </p>
 
-      <h2 className="text-base font-bold text-slate-700 mt-3">Breakdown</h2>
+      <h2 className="text-base font-bold text-stone-700 mt-3">Breakdown</h2>
       <ol>
         {stages.list.map((stage) => {
           if (stage === null || !("score" in stage)) {

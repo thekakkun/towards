@@ -12,7 +12,7 @@ export default function GuessInfo(stages: ReturnType<typeof useStages>) {
         stages.current().country
       }`}</p>
       <button
-        className="bg-slate-400 row-start-1 col-start-2 row-span-2"
+        className="bg-stone-400 row-start-1 col-start-2 row-span-2"
         onClick={() => {
           if (rolls) {
             setRolls(rolls - 1);

@@ -12,39 +12,45 @@ export default function Intro({ coordinates, heading }: IntroProps) {
   return (
     <div className="">
       <p>
-        This is a location-based geography game in which you try to face towards
-        the target city.
+        This is a location-based smartphone game where you try to guess which
+        way cities around the world are.
       </p>
-
-      <h2 className="text-lg font-bold mt-3">Requirements:</h2>
-      <p>
-        Being a location-based geograpy game, permission to access the following
-        information is needed:
-      </p>
-
-      <ul className="list-inside">
+      <ul className="list-disc pl-4">
         <li>
-          <CoordinatesInfo {...coordinates}></CoordinatesInfo>
+          You'll get five cities, each worth 200 points for a total score out of
+          1,000.
         </li>
-        <li>
-          <HeadingInfo {...heading}></HeadingInfo>
-        </li>
+        <li>You can re-roll your target city up to 3 times per game.</li>
       </ul>
+
+      <h2 className="text-lg text-stone-800 font-bold mt-3">Requirements</h2>
       <p>
-        No user data will be collected by the game or shared with third-parties.
+        The game requires permission to access your geolocation and compass
+        heading to play. No user data will be collected by the game or shared
+        with third-parties.
       </p>
 
-      <h3 className="text-base font-bold text-slate-700">
-        Supported browsers:
+      <ul className="list-inside mt-2">
+        <CoordinatesInfo {...coordinates}></CoordinatesInfo>
+        <HeadingInfo {...heading}></HeadingInfo>
+      </ul>
+
+      <h3 className="text-base font-bold text-stone-700 mt-2">
+        Supported browsers
       </h3>
 
-      <ul className="list-disc list-inside">
-        <li>Android OS: Chrome</li>
-        <li>iOS: Safari</li>
+      <ul className="list-disc pl-4">
+        <li>
+          <span className="font-semibold">Android OS</span>: Chrome
+        </li>
+        <li>
+          <span className="font-semibold">iOS</span>: Safari
+        </li>
       </ul>
 
-      <h2 className="text-lg font-bold mt-3">Learn more:</h2>
+      <h2 className="text-lg text-stone-800 font-bold mt-3">Learn more</h2>
       <a
+        className="text-sky-700 underline"
         href="https://github.com/thekakkun/over-yonder/"
         target="_blank"
         rel="noreferrer"

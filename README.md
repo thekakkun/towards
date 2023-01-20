@@ -2,6 +2,8 @@
 
 Find out how Mercator screwed up your sense of direction!
 
+[Play the game here!](https://thekakkun.github.io/over-yonder)
+
 ## Tech Stack
 
 - [Create React App](https://create-react-app.dev/): Framework

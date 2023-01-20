@@ -4,8 +4,8 @@ export default function HeadingInfo(
   coordinates: ReturnType<typeof useHeading>
 ) {
   return (
-    <div
-      className={`rounded border-2 p-2 ${
+    <li
+      className={`rounded border-2 mt-2 p-2 ${
         coordinates.state === "ready"
           ? "bg-emerald-100 border-emerald-400"
           : coordinates.state === "unavailable"
@@ -33,15 +33,15 @@ export default function HeadingInfo(
         <div>
           <p>Press the button below to provide permissions.</p>
           <button
-            className="bg-slate-500 hover:bg-slate-700 px-5 py-2 text-sm font-semibold mt-2 rounded-full text-slate-50"
+            className="bg-stone-500 hover:bg-stone-700 px-5 py-2 text-sm font-semibold mt-2 rounded-full text-stone-50"
             onClick={coordinates.requestAccess}
           >
             Provide permission
           </button>
         </div>
       ) : coordinates.state === "ready" ? (
-        <p>Compass data ready!</p>
+        <p>Good to go!</p>
       ) : null}
-    </div>
+    </li>
   );
 }

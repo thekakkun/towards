@@ -10,28 +10,24 @@ import useHeading from "./hooks/useHeading";
 import useStages from "./hooks/useStages";
 
 function App() {
-  // const position = usePosition();
   const coordinates = useCoordinates();
   const heading = useHeading();
-
   const stages = useStages();
   const game = useGame(stages, coordinates, heading);
 
-  function getContent() {
-    if (game.state === "intro") {
-      return <Intro {...{ coordinates, heading }}></Intro>;
-    } else if (game.state === "outro") {
-      return <Outro {...stages}></Outro>;
-    } else {
-      return <Game {...{ game, coordinates, heading, stages }}></Game>;
-    }
-  }
-
   return (
-    <div className="h-full flex flex-col items-center justify-between pb-4">
+    <div className="max-w-3xl mx-auto">
       <Header></Header>
-      <Content>{getContent()}</Content>
-      <Button {...game}></Button>
+      <Content>
+        {game.state === "intro" ? (
+          <Intro {...{ coordinates, heading }}></Intro>
+        ) : game.state === "outro" ? (
+          <Outro {...stages}></Outro>
+        ) : (
+          <Game {...{ game, coordinates, heading, stages }}></Game>
+        )}
+      </Content>
+      <Button {...{ game, coordinates, heading }}></Button>
     </div>
   );
 }

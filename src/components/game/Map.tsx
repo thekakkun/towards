@@ -31,7 +31,7 @@ export default function Map({ stages, coordinates }: MapProps) {
 
   const globe = <path id="globe" fill={colors.blue[100]}></path>;
   const countries = (
-    <g id="countries" fill={colors.stone[100]} stroke={colors.slate[400]}></g>
+    <g id="countries" fill={colors.stone[100]} stroke={colors.stone[400]}></g>
   );
   const destination = (
     <g>
