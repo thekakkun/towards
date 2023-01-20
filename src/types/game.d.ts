@@ -8,11 +8,6 @@ import { Degrees } from "./math";
 export type SensorState = "unknown" | "unavailable" | PermissionState | "ready";
 export type GameState = "intro" | "guess" | "answer" | "last answer" | "outro";
 
-// export interface Position {
-//   coordinates: ReturnType<typeof useCoordinates>;
-//   heading: ReturnType<typeof useHeading>;
-// }
-
 // Stage stuff
 export interface CurrentLocation extends Location, Coordinates {}
 

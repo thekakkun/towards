@@ -9,9 +9,6 @@ interface IntroProps {
 }
 
 export default function Intro({ coordinates, heading }: IntroProps) {
-  // const coordinates = useCoordinates();
-  // const heading = useHeading();
-
   return (
     <div className="">
       <p>

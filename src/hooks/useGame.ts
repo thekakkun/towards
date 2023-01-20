@@ -23,27 +23,8 @@ export default function useGame(
 ) {
   const [gameState, setGameState] = useState<GameState>("intro");
 
-  // useEffect(() => {
-  //   if (gameState === GameState.Permissions) {
-  //     if (coordinates.value && heading.value) {
-  //       setGameState(GameState.Ready);
-  //     } else if (
-  //       coordinates.permission === "granted" &&
-  //       heading.permission === "granted"
-  //     ) {
-  //       coordinates.requestPermission();
-  //       heading.requestPermission();
-  //     }
-  //   }
-  // }, [gameState, coordinates, heading]);
-
   function advance() {
     switch (gameState) {
-      // case GameState.Permissions:
-      //   coordinates.requestPermission();
-      //   heading.requestPermission();
-      //   break;
-
       case "intro":
         stages.setNext();
         setGameState("guess");
