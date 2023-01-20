@@ -1,4 +1,5 @@
-import { Degrees } from "./math";
+export type Degrees = number;
+export type Radians = number;
 
 export interface Location {
   city: string;

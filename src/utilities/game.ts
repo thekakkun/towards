@@ -1,8 +1,8 @@
 import cities from "../assets/data/cities.json";
 import useCoordinates from "../hooks/useCoordinates";
 import useHeading from "../hooks/useHeading";
+import { Degrees } from "../types/cartography";
 import { CurrentLocation, StageList } from "../types/game";
-import { Degrees } from "../types/math";
 import { getBearing } from "./cartography";
 
 export function getScore(
@@ -25,46 +25,6 @@ export function getScore(
 
   return Math.round(200 * (1 - degreeDelta / 180));
 }
-
-// /**
-//  * Get a random location.
-//  * @param currentStages The list of current stages
-//  * @returns A random location, not in the current stage list.
-//  */
-// export function getLocation(currentStages: StageList = []): CurrentLocation {
-//   let candidate: CurrentLocation;
-
-//   /**
-//    * Create a function to compare the candidate with a stage.
-//    * Function exists, since a anonymous function raises the
-//    * 'no-loop-func' ESLint warning.
-//    * @param candidate The candidate location
-//    * @returns A function to compare the candidate location with a stage.
-//    */
-//   function compareCandidate(candidate: CurrentLocation) {
-//     return function _candidateChecker({
-//       country,
-//       city,
-//     }: {
-//       country: string;
-//       city: string;
-//     }) {
-//       return country === candidate.country && city === candidate.city;
-//     };
-//   }
-
-//   while (true) {
-//     candidate = cities[getRandomInt(0, cities.length)];
-
-//     if (currentStages.length === 0) {
-//       return candidate;
-//     } else if (currentStages.filter(compareCandidate(candidate)).length !== 0) {
-//       continue;
-//     }
-
-//     return candidate;
-//   }
-// }
 
 /**
  * Get a compass heading, if available, or null

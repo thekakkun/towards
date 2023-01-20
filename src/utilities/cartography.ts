@@ -1,9 +1,25 @@
-import { Coordinates } from "../types/cartography";
-import { Degrees, Radians } from "../types/math";
-import { degToRad, radToDeg } from "./math";
+import { Coordinates, Degrees, Radians } from "../types/cartography";
 
 /** The earth's radius in kms */
 const R = 6371;
+
+/**
+ * Convert angles in degrees into radians.
+ * @param degrees Angle in degrees.
+ * @returns Angle in radians.
+ */
+export function degToRad(degrees: Degrees): Radians {
+  return degrees * (Math.PI / 180);
+}
+
+/**
+ * Convert angles in radians to degrees.
+ * @param rad Angle in radians.
+ * @returns Angle in degrees.
+ */
+export function radToDeg(rad: Radians): Degrees {
+  return rad / (Math.PI / 180);
+}
 
 /**
  * Normalize compass bearing to [0, 360] degrees
