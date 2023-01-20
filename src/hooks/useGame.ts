@@ -1,81 +1,82 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { GameState } from "../types/game";
 
 import { getScore } from "../utilities/game";
-import usePosition from "./usePosition";
+import useCoordinates from "./useCoordinates";
+import useHeading from "./useHeading";
 import useStages from "./useStages";
 
-export enum GameState {
-  Permissions,
-  Ready,
-  Guess,
-  Answer,
-  LastAnswer,
-  Outro,
-}
+// export enum GameState {
+//   Permissions,
+//   Ready,
+//   Guess,
+//   Answer,
+//   LastAnswer,
+//   Outro,
+// }
 
 export default function useGame(
   stages: ReturnType<typeof useStages>,
-  position: ReturnType<typeof usePosition>
+  coordinates: ReturnType<typeof useCoordinates>,
+  heading: ReturnType<typeof useHeading>
+  // position: ReturnType<typeof usePosition>
 ) {
-  const [gameState, setGameState] = useState(GameState.Permissions);
+  const [gameState, setGameState] = useState<GameState>("intro");
 
-  useEffect(() => {
-    if (gameState === GameState.Permissions) {
-      if (position.coordinates.value && position.heading.value) {
-        setGameState(GameState.Ready);
-      } else if (
-        position.coordinates.permission === "granted" &&
-        position.heading.permission === "granted"
-      ) {
-        position.coordinates.requestPermission();
-        position.heading.requestPermission();
-      }
-    }
-  }, [gameState, position.coordinates, position.heading]);
+  // useEffect(() => {
+  //   if (gameState === GameState.Permissions) {
+  //     if (coordinates.value && heading.value) {
+  //       setGameState(GameState.Ready);
+  //     } else if (
+  //       coordinates.permission === "granted" &&
+  //       heading.permission === "granted"
+  //     ) {
+  //       coordinates.requestPermission();
+  //       heading.requestPermission();
+  //     }
+  //   }
+  // }, [gameState, coordinates, heading]);
 
   function advance() {
     switch (gameState) {
-      case GameState.Permissions:
-        position.coordinates.requestPermission();
-        position.heading.requestPermission();
-        break;
+      // case GameState.Permissions:
+      //   coordinates.requestPermission();
+      //   heading.requestPermission();
+      //   break;
 
-      case GameState.Ready:
+      case "intro":
         stages.setNext();
-        setGameState(GameState.Guess);
+        setGameState("guess");
         break;
 
-      case GameState.Guess:
-        if (position.heading.value === null) {
+      case "guess":
+        if (heading.value === null) {
           throw new Error("Heading is null.");
         }
 
-        const score = getScore(stages.current(), {
-          coordinates: position.coordinates.value,
-          heading: position.heading.value,
-        });
-        stages.makeGuess({ heading: position.heading.value, score });
+        const score = getScore(stages.current(), coordinates, heading);
+        stages.makeGuess({ heading: heading.value, score });
 
         if (stages.onFinal()) {
-          setGameState(GameState.LastAnswer);
+          setGameState("last answer");
         } else {
-          setGameState(GameState.Answer);
+          setGameState("answer");
         }
         break;
 
-      case GameState.Answer:
+      case "answer":
         stages.setNext();
-        setGameState(GameState.Guess);
+        setGameState("guess");
 
         break;
 
-      case GameState.LastAnswer:
-        setGameState(GameState.Outro);
+      case "last answer":
+        setGameState("outro");
         break;
 
-      case GameState.Outro:
+      case "outro":
         stages.reset();
-        setGameState(GameState.Ready);
+        setGameState("intro");
         break;
 
       default:

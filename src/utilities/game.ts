@@ -1,20 +1,26 @@
 import cities from "../assets/data/cities.json";
-import { CurrentLocation, Position, StageList } from "../types/game";
+import useCoordinates from "../hooks/useCoordinates";
+import useHeading from "../hooks/useHeading";
+import { CurrentLocation, StageList } from "../types/game";
 import { Degrees } from "../types/math";
 import { getBearing } from "./cartography";
 
-export function getScore(target: CurrentLocation, position: Position) {
-  if (position.heading === null) {
+export function getScore(
+  target: CurrentLocation,
+  coordinates: ReturnType<typeof useCoordinates>,
+  heading: ReturnType<typeof useHeading>
+) {
+  if (heading.value === null) {
     throw Error("Heading not available");
   }
-  if (position.coordinates === null) {
+  if (coordinates.value === null) {
     throw Error("User position not available.");
   }
 
-  const bearing = getBearing(position.coordinates, target);
+  const bearing = getBearing(coordinates.value, target);
   const degreeDelta = Math.min(
-    Math.abs(bearing - position.heading),
-    360 - Math.abs(bearing - position.heading)
+    Math.abs(bearing - heading.value),
+    360 - Math.abs(bearing - heading.value)
   );
 
   return Math.round(200 * (1 - degreeDelta / 180));

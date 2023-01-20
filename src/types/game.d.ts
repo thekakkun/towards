@@ -1,21 +1,17 @@
 import { Dispatch } from "react";
+
+import useCoordinates from "../hooks/useCoordinates";
+import useHeading from "../hooks/useHeading";
 import { Coordinates, Location } from "./cartography";
 import { Degrees } from "./math";
 
-export type gameState =
-  | "permissions"
-  | "intro"
-  | "guess"
-  | "answer"
-  | "lastAnswer"
-  | "outro";
-
 export type SensorState = "unknown" | "unavailable" | PermissionState | "ready";
+export type GameState = "intro" | "guess" | "answer" | "last answer" | "outro";
 
-export interface Position {
-  coordinates: Coordinates | null;
-  heading: Degrees | null;
-}
+// export interface Position {
+//   coordinates: ReturnType<typeof useCoordinates>;
+//   heading: ReturnType<typeof useHeading>;
+// }
 
 // Stage stuff
 export interface CurrentLocation extends Location, Coordinates {}

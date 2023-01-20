@@ -94,6 +94,10 @@ export default function useHeading(): {
     // For cases where event listeners exists, but alpha/compassHeading value is null.
     // Should be overwritten once heading value is non-null
     setSensorState("unavailable");
+
+    if (process.env.NODE_ENV === "development") {
+      setHeading(30);
+    }
   }
 
   /**

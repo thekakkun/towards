@@ -4,35 +4,26 @@ import Game from "./components/game/Game";
 import Header from "./components/Header";
 import Intro from "./components/intro/Intro";
 import Outro from "./components/Outro";
-import useGame, { GameState } from "./hooks/useGame";
-import usePosition from "./hooks/usePosition";
+import useCoordinates from "./hooks/useCoordinates";
+import useGame from "./hooks/useGame";
+import useHeading from "./hooks/useHeading";
 import useStages from "./hooks/useStages";
 
 function App() {
-  const position = usePosition();
+  // const position = usePosition();
+  const coordinates = useCoordinates();
+  const heading = useHeading();
 
   const stages = useStages();
-  const game = useGame(stages, position);
+  const game = useGame(stages, coordinates, heading);
 
   function getContent() {
-    if (
-      game.state === GameState.Permissions ||
-      game.state === GameState.Ready
-    ) {
-      return <Intro {...position}></Intro>;
-    } else if (game.state === GameState.Outro) {
+    if (game.state === "intro") {
+      return <Intro {...{ coordinates, heading }}></Intro>;
+    } else if (game.state === "outro") {
       return <Outro {...stages}></Outro>;
     } else {
-      return (
-        <Game
-          game={game}
-          position={{
-            coordinates: position.coordinates.value,
-            heading: position.heading.value,
-          }}
-          stages={stages}
-        ></Game>
-      );
+      return <Game {...{ game, coordinates, heading, stages }}></Game>;
     }
   }
 

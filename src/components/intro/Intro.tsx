@@ -1,13 +1,16 @@
 import useCoordinates from "../../hooks/useCoordinates";
 import useHeading from "../../hooks/useHeading";
-import usePosition from "../../hooks/usePosition";
-
 import CoordinatesInfo from "./CoordinatesInfo";
 import HeadingInfo from "./HeadingInfo";
 
-export default function Intro(position: ReturnType<typeof usePosition>) {
-  const coordinates = useCoordinates();
-  const heading = useHeading();
+interface IntroProps {
+  coordinates: ReturnType<typeof useCoordinates>;
+  heading: ReturnType<typeof useHeading>;
+}
+
+export default function Intro({ coordinates, heading }: IntroProps) {
+  // const coordinates = useCoordinates();
+  // const heading = useHeading();
 
   return (
     <div className="">

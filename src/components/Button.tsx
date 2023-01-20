@@ -1,4 +1,4 @@
-import useGame, { GameState } from "../hooks/useGame";
+import useGame from "../hooks/useGame";
 
 export default function Button(game: ReturnType<typeof useGame>) {
   return (
@@ -13,23 +13,20 @@ export default function Button(game: ReturnType<typeof useGame>) {
 
 function buttonText({ state: gameState }: ReturnType<typeof useGame>) {
   switch (gameState) {
-    case GameState.Permissions:
-      return "Provide permissions";
-
-    case GameState.Ready:
+    case "intro":
       return "Start Game";
 
-    case GameState.Guess:
+    case "guess":
       return "Make guess";
 
-    case GameState.Answer:
+    case "answer":
       return "Next location";
 
-    case GameState.LastAnswer:
+    case "last answer":
       return "Final results";
 
-    case GameState.Outro:
-      return "New game";
+    case "outro":
+      return "Play again";
 
     default:
       break;

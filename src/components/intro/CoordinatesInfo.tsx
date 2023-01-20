@@ -40,7 +40,7 @@ export default function CoordinatesInfo(
           </button>
         </div>
       ) : coordinates.state === "ready" ? (
-        <p>Geolocation requirements met!</p>
+        <p>Geolocation data ready!</p>
       ) : null}
     </div>
   );

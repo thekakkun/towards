@@ -1,11 +1,9 @@
 import compass from "../../assets/images/compass.png";
-import { Degrees } from "../../types/math";
+import useHeading from "../../hooks/useHeading";
 
-interface CompassProps {
-  heading: Degrees;
-}
-
-export default function Compass({ heading }: CompassProps) {
+export default function Compass({
+  value: heading,
+}: ReturnType<typeof useHeading>) {
   return (
     <div className="self-end overflow-clip m-auto">
       <img

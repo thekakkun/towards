@@ -1,17 +1,17 @@
 import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
+import useCoordinates from "../../hooks/useCoordinates";
 
 import useStages from "../../hooks/useStages";
-import { Position } from "../../types/game";
 
 import D3Map from "./D3Map";
 
 interface MapProps {
   stages: ReturnType<typeof useStages>;
-  position: Position;
+  coordinates: ReturnType<typeof useCoordinates>;
 }
 
-export default function Map({ stages, position }: MapProps) {
+export default function Map({ stages, coordinates }: MapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
 
   const target = stages.current();
@@ -20,10 +20,10 @@ export default function Map({ stages, position }: MapProps) {
   }
 
   useEffect(() => {
-    if (position.coordinates === null) {
+    if (coordinates.value === null) {
       throw new Error("Coordinates not available.");
     } else if (svgRef.current) {
-      new D3Map(svgRef.current, target, position.coordinates);
+      new D3Map(svgRef.current, target, coordinates.value);
     }
     // TODO: Fix this!!!
     // eslint-disable-next-line

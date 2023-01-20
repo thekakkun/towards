@@ -13,22 +13,22 @@ export default function HeadingInfo(
           : "bg-yellow-100 border-yellow-400"
       }`}
     >
-      <h2 className="font-bold">Orientation</h2>
+      <h2 className="font-bold">Compass</h2>
 
       {coordinates.state === "unknown" ? (
-        <p>Orientation state unknown.</p>
+        <p>Compass state unknown.</p>
       ) : coordinates.state === "unavailable" ? (
         <p>
-          Orientation services are unavailable on this device. Please double
+          Compass services are unavailable on this device. Please double
           check the list of supported browsers below.
         </p>
       ) : coordinates.state === "denied" ? (
         <div>
-          <p>Permission to access orientation was denied.</p>
+          <p>Permission to access compass was denied.</p>
           {/* TODO: add instructions for various devices. */}
         </div>
       ) : coordinates.state === "granted" ? (
-        <p>Permission granted. Attempting to retrieve orientation...</p>
+        <p>Permission granted. Attempting to retrieve compass heading...</p>
       ) : coordinates.state === "prompt" ? (
         <div>
           <p>Press the button below to provide permissions.</p>
@@ -40,7 +40,7 @@ export default function HeadingInfo(
           </button>
         </div>
       ) : coordinates.state === "ready" ? (
-        <p>Orientation requirements met!</p>
+        <p>Compass data ready!</p>
       ) : null}
     </div>
   );

@@ -1,6 +1,8 @@
-import useGame, { GameState } from "../../hooks/useGame";
+import useCoordinates from "../../hooks/useCoordinates";
+import useGame from "../../hooks/useGame";
+import useHeading from "../../hooks/useHeading";
 import useStages from "../../hooks/useStages";
-import { Position } from "../../types/game";
+
 import AnswerInfo from "./AnswerInfo";
 import Compass from "./Compass";
 import Display from "./Display";
@@ -10,34 +12,40 @@ import Progress from "./Progress";
 
 interface GameProps {
   game: ReturnType<typeof useGame>;
-  position: Position;
+  coordinates: ReturnType<typeof useCoordinates>;
+  heading: ReturnType<typeof useHeading>;
   stages: ReturnType<typeof useStages>;
 }
 
-export default function Game({ game, position, stages }: GameProps) {
-  if (position.heading === null) {
+export default function Game({
+  game,
+  coordinates,
+  heading,
+  stages,
+}: GameProps) {
+  if (heading === null) {
     throw new Error("Heading not available.");
-  } else if (position.coordinates === null) {
+  } else if (coordinates === null) {
     throw new Error("Coordinates not available.");
   }
 
   const guessDisplay = (
     <Display
       info={<GuessInfo {...stages}></GuessInfo>}
-      visualization={<Compass heading={position.heading}></Compass>}
+      visualization={<Compass {...heading}></Compass>}
     ></Display>
   );
   const answerDisplay = (
     <Display
       info={<AnswerInfo {...stages}></AnswerInfo>}
-      visualization={<Map stages={stages} position={position}></Map>}
+      visualization={<Map {...{ stages, coordinates }}></Map>}
     ></Display>
   );
 
   return (
     <div className="h-full flex flex-col gap-3">
       <Progress {...stages}></Progress>
-      {game.state === GameState.Guess ? guessDisplay : answerDisplay}
+      {game.state === "guess" ? guessDisplay : answerDisplay}
     </div>
   );
 }
