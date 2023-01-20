@@ -17,7 +17,11 @@ export default function Button({ game, coordinates, heading }: ButtonProps) {
             ? "bg-emerald-600 text-stone-50"
             : "bg-stone-300 text-stone-100"
         }`}
-        onClick={game.advance}
+        onClick={
+          coordinates.state === "ready" && heading.state === "ready"
+            ? game.advance
+            : undefined
+        }
       >
         {game.state === "intro"
           ? "Start Game"
