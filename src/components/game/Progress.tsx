@@ -6,14 +6,33 @@ export default function Progress(stages: ReturnType<typeof useStages>) {
   }
 
   return (
-    <ol className="flex flex-row gap-1">
+    <ol className="flex flex-row gap-2">
       {stages.list.map((stage, i) => (
-        <li key={i} className="flex-1 bg-stone-400">
-          <p className="text-center">{i + 1}</p>
-          {stage ? <p className="text-center">{stage.city}</p> : null}
-          {stage !== null && "score" in stage && (
-            <p className="text-center">{stage.score}</p>
-          )}
+        <li
+          key={i}
+          className={`flex-1 rounded-lg p-2 ${
+            stage === null
+              ? "bg-stone-300"
+              : "score" in stage
+              ? "bg-stone-400"
+              : "bg-emerald-600"
+          }`}
+        >
+          <p
+            className={`text-center font-bold ${
+              stage === null
+                ? "text-stone-100"
+                : "score" in stage
+                ? "text-stone-900"
+                : "text-stone-50"
+            }`}
+          >
+            {i + 1}
+          </p>
+
+          <p className="text-center">
+            {stage !== null && "score" in stage ? stage.score : "\u00A0"}
+          </p>
         </li>
       ))}
     </ol>

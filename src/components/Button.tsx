@@ -10,7 +10,7 @@ interface ButtonProps {
 
 export default function Button({ game, coordinates, heading }: ButtonProps) {
   return (
-    <div className="w-full sticky bottom-0 inset-x-0 flex flex-col items-center ">
+    <div className="w-full fixed bottom-0 inset-x-0 flex flex-col items-center bg-stone-100">
       <button
         className={`rounded-xl font-semibold w-3/4 p-4 my-4 mx-auto ${
           coordinates.state === "ready" && heading.state === "ready"

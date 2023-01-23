@@ -14,7 +14,7 @@ Find out how Mercator screwed up your sense of direction!
 ## Todo
 
 - [x] Get coordinates and heading working on Safari
+- [ ] Clean up visual style
 - [ ] Create better list of potential targets (use Wikidata)
 - [ ] Add criteria for target (not too close, not too far)
 - [ ] Take other rotation axes into consideration
-- [ ] Overhaul visual style
