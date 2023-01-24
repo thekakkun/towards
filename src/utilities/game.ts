@@ -1,7 +1,6 @@
 import cities from "../assets/data/cities.json";
 import useCoordinates from "../hooks/useCoordinates";
 import useHeading from "../hooks/useHeading";
-import { Degrees } from "../types/cartography";
 import { CurrentLocation, StageList } from "../types/game";
 import { getBearing } from "./cartography";
 
