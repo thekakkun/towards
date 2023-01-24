@@ -1,20 +1,24 @@
-import compass from "../../assets/images/compass.png";
+import { ReactComponent as Rose } from "../../assets/images/rose.svg";
+import { ReactComponent as Needle } from "../../assets/images/needle.svg";
 import useHeading from "../../hooks/useHeading";
 
 export default function Compass({
   value: heading,
 }: ReturnType<typeof useHeading>) {
   return (
-    <div className="self-end overflow-clip m-auto">
-      <img
-        className="rounded-full w-4/5 m-auto"
+    <div className="overflow-clip relative w-full mx-auto aspect-square">
+      <Rose
+        title="Compass rose"
+        className="rounded-full w-full absolute"
         style={{
           transformStyle: "preserve-3d",
           transform: `rotateX(45deg) rotate(-${heading}deg)`,
         }}
-        src={compass}
-        alt={`compass heading: ${heading} degrees`}
-      />
+      ></Rose>
+      <Needle
+        title="Compass needle"
+        className="rounded-full w-full absolute h-2/5 top-[30%]"
+      ></Needle>
     </div>
   );
 }

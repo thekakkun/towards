@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   viewBox="0 0 450 450"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlnssvg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer2">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:53.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1c1917;fill-opacity:1;stroke:none"
+       x="-250.78665"
+       y="38.079979"
+       id="text5840-8-6-2"
+       transform="rotate(-90)"><tspan
+         id="tspan5838-7-1-0"
+         x="-250.78665"
+         y="38.079979">W</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:53.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1c1917;fill-opacity:1;stroke:none"
+       x="209.24001"
+       y="-411.92001"
+       id="text5840-8-6"
+       transform="rotate(90)"><tspan
+         id="tspan5838-7-1"
+         x="209.24001"
+         y="-411.92001">E</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:53.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1c1917;fill-opacity:1;stroke:none"
+       x="-239.85332"
+       y="-411.38669"
+       id="text5840-8"
+       transform="scale(-1)"><tspan
+         id="tspan5838-7"
+         x="-239.85332"
+         y="-411.38669">S</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:53.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#dc2626;fill-opacity:1;stroke:none"
+       x="203.32001"
+       y="38.079979"
+       id="text5840"><tspan
+         id="tspan5838"
+         x="203.32001"
+         y="38.079979">N</tspan></text>
+    <g
+       id="g14619"
+       transform="translate(1.293336,-1.0012819)">
+      <path
+         style="display:inline;fill:none;fill-opacity:1;stroke:#57534e;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+         d="m 54.475255,226.00128 h 19.94064"
+         id="path7139" />
+      <path
+         style="display:inline;fill:none;fill-opacity:1;stroke:#57534e;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+         d="m 372.99747,226.00128 h 19.9406"
+         id="path7136" />
+      <path
+         style="display:inline;fill:none;fill-opacity:1;stroke:#57534e;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+         d="m 224.41332,375.29205 v 19.94064"
+         id="path7040-3" />
+      <path
+         style="display:inline;fill:none;fill-opacity:1;stroke:#dc2626;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+         d="m 223,56.769878 v 19.94064"
+         id="path7040" />
+      <circle
+         style="fill:none;fill-opacity:1;stroke:#1c1917;stroke-width:4.13936;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+         id="path3993"
+         cx="-226.00128"
+         cy="223.70667"
+         r="167.16173"
+         transform="rotate(-90)" />
+    </g>
+  </g>
+</svg>

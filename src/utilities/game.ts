@@ -10,6 +10,8 @@ export function getScore(
   coordinates: ReturnType<typeof useCoordinates>,
   heading: ReturnType<typeof useHeading>
 ) {
+  const maxScore = 200;
+
   if (heading.value === null) {
     throw Error("Heading not available");
   }
@@ -23,7 +25,7 @@ export function getScore(
     360 - Math.abs(bearing - heading.value)
   );
 
-  return Math.round(200 * (1 - degreeDelta / 180));
+  return Math.round(200 * (1 - degreeDelta / 180) ** 2);
 }
 
 /**

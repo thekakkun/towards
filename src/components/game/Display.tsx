@@ -7,11 +7,9 @@ interface DisplayProps {
 
 export default function Display(props: DisplayProps) {
   return (
-    <div>
+    <div className="">
       <div>{props.info}</div>
-      <div className="h-full flex flex-col justify-between">
-        {props.visualization}
-      </div>
+      <div className="">{props.visualization}</div>
     </div>
   );
 }
