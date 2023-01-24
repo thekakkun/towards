@@ -8,12 +8,18 @@ export default function AnswerInfo(stages: ReturnType<typeof useStages>) {
   }
 
   return (
-    <div>
-      <p>Your target:</p>
-      <p>{`${target.city}, ${target.country}`}</p>
+    <div className="mb-4">
+      <p>
+        Your target:{" "}
+        <span className="text-lg text-emerald-900 font-semibold">{`${target.city}, ${target.country}`}</span>
+      </p>
 
-      <p>You scored:</p>
-      <p>{target.score}</p>
+      <p>
+        You scored:{" "}
+        <span className="text-lg text-emerald-900 font-semibold">
+          {target.score}/200
+        </span>
+      </p>
     </div>
   );
 }
