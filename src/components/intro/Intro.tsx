@@ -10,7 +10,7 @@ interface IntroProps {
 
 export default function Intro({ coordinates, heading }: IntroProps) {
   return (
-    <div className="">
+    <div className="mb-28">
       <p>
         This is a location-based smartphone game where you try to guess which
         way cities around the world are.
