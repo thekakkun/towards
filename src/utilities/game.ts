@@ -25,7 +25,7 @@ export function getScore(
     360 - Math.abs(bearing - heading.value)
   );
 
-  return Math.round(200 * (1 - degreeDelta / 180) ** 2);
+  return Math.round(maxScore * (1 - degreeDelta / 180) ** 2);
 }
 
 /**
