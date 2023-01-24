@@ -8,9 +8,9 @@ export default function GuessInfo(stages: ReturnType<typeof useStages>) {
   return (
     <div className="grid grid-rows-1 grid-cols-[1fr_max-content]">
       <p className="">Which way is...</p>
-      <p className="text-lg text-emerald-900 font-semibold">{`${
-        stages.current().city
-      }, ${stages.current().country}`}</p>
+      <p className="text-lg text-emerald-700 font-semibold">
+        {stages.current().city}, {stages.current().country}
+      </p>
       <button
         className={`row-start-1 col-start-2 row-span-2 place-self-center
         rounded-md h-min px-3 py-2 font-bold
@@ -24,7 +24,7 @@ export default function GuessInfo(stages: ReturnType<typeof useStages>) {
           }
         }}
       >
-        {`🎲 × ${rolls}`}
+        🎲 × {rolls}
       </button>
     </div>
   );

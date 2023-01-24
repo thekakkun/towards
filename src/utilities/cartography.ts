@@ -89,7 +89,7 @@ export function getBearing(loc1: Coordinates, loc2: Coordinates): Degrees {
 }
 
 /**
- * Return a destination point, vigen starting location, starting bearing,
+ * Return a destination point, given a starting location, starting bearing,
  * and distance.
  * @param location Coordinates of starting location.
  * @param distance Distance to travel in km.

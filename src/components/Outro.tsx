@@ -6,37 +6,52 @@ export default function Outro(stages: ReturnType<typeof useStages>) {
     throw new Error("Stages not initialized.");
   }
 
+  const totalScore = stages.list.reduce(
+    (prev, curr) => prev + (curr as CompletedLocation).score,
+    0
+  );
+
   return (
     <div>
       <h1 className="text-lg font-bold">Good Job!</h1>
-      <p>
-        You scored{" "}
-        {`${stages.list.reduce(
-          (prev, curr) => prev + (curr as CompletedLocation).score,
-          0
-        )}/1000`}
+      <p className="text-lg text-emerald-700 font-semibold">
+        You scored <span className="font-bold">{totalScore} / 1,000</span>
       </p>
 
-      <h2 className="text-base font-bold text-stone-700 mt-3">Breakdown</h2>
-      <ol>
-        {stages.list.map((stage) => {
-          if (stage === null || !("score" in stage)) {
-            throw new Error("Stage not completed");
-          }
-          return (
-            <li
-              className="list-decimal list-inside"
-              key={`${stage.city}_${stage.country}`}
-            >
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${stage.latitude},${stage.longitude}`}
-                className="underline text-sky-500"
-              >{`${stage.city}, ${stage.country}`}</a>
-              {`: ${stage.score}/200`}
-            </li>
-          );
-        })}
-      </ol>
+      <h2 className="text-base font-bold text-stone-700 mt-2">Breakdown</h2>
+      <table className="table-fixed w-full">
+        <tbody>
+          {stages.list.map((stage, i) => {
+            if (stage === null || !("score" in stage)) {
+              throw new Error("Stage not completed");
+            }
+            return (
+              <tr key={stage.city + stage.country}>
+                <td className="py-2 pr-2 align-top w-min">{i + 1}.</td>
+                <td className="py-2">
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${stage.latitude},${stage.longitude}`}
+                    className="underline text-sky-600"
+                  >
+                    {stage.city}, {stage.country}
+                  </a>
+                </td>
+                <td className="py-2 text-right w-28">{stage.score} / 200</td>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot className="font-bold text-lg">
+          <tr>
+            <td className="py-2" colSpan={2}>
+              Total:
+            </td>
+            <td className="py-2 text-right text-emerald-700 w-28">
+              {totalScore} / 1,000
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 }

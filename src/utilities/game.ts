@@ -28,24 +28,6 @@ export function getScore(
   return Math.round(maxScore * (1 - degreeDelta / 180) ** 2);
 }
 
-/**
- * Get a compass heading, if available, or null
- * @param event The DeviceOrientationEvent from a "deviceorientation" or
- * "deviceorientationabsolute" event listener.
- * @returns Compass heading, if available, or null;
- */
-export function getHeading(event: DeviceOrientationEvent): Degrees | null {
-  if ("webkitCompassHeading" in event) {
-    return (event as any).webkitCompassHeading as Degrees;
-  } else if (!event.absolute) {
-    return null;
-  } else if (event.alpha !== null) {
-    return 359 - event.alpha;
-  } else {
-    return null;
-  }
-}
-
 export function getRandomCity(stages: StageList) {
   let candidate: CurrentLocation;
 

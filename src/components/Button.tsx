@@ -30,7 +30,7 @@ export default function Button({ game, coordinates, heading }: ButtonProps) {
           : game.state === "answer"
           ? "Next location"
           : game.state === "last answer"
-          ? "Get score"
+          ? "See results"
           : game.state === "outro"
           ? "Play again"
           : ""}

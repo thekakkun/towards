@@ -46,7 +46,7 @@ export default function Map({ stages, coordinates }: MapProps) {
       <text
         id="destLabel"
         dominantBaseline="middle"
-      >{`${target.city}, ${target.country}`}</text>
+      >{target.city}, {target.country}</text>
     </g>
   );
   const guess = (
