@@ -12,8 +12,8 @@ export default function Intro({ coordinates, heading }: IntroProps) {
   return (
     <div className="mb-28">
       <p>
-        This is a location-based smartphone game where you try to guess which
-        way cities around the world are.
+        Try and guess which direction the specified city lies in this
+        location-based smartphone game!
       </p>
       <ul className="list-disc pl-4">
         <li>

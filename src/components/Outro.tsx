@@ -30,7 +30,9 @@ export default function Outro(stages: ReturnType<typeof useStages>) {
                 <td className="py-2 pr-2 align-top">{i + 1}.</td>
                 <td className="py-2">
                   <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${stage.latitude},${stage.longitude}`}
+                    href={stage.link}
+                    target="_blank"
+                    rel="noreferrer"
                     className="underline text-sky-600"
                   >
                     {stage.city}, {stage.country}
