@@ -12,13 +12,13 @@ export default function Intro({ coordinates, heading }: IntroProps) {
   return (
     <div className="mb-28">
       <p>
-        Try and guess which direction the specified city lies in this
-        location-based smartphone game!
+        In this geography game, try and guess which direction the specified city
+        is from your current location.
       </p>
       <ul className="list-disc pl-4">
         <li>
-          You'll get five cities, each worth 200 points for a total score out of
-          1,000.
+          You'll be given five cities, each worth 200 points for a total score
+          out of 1,000.
         </li>
         <li>You can re-roll your target city up to 3 times per game.</li>
       </ul>
@@ -26,8 +26,8 @@ export default function Intro({ coordinates, heading }: IntroProps) {
       <h2 className="text-lg text-stone-800 font-bold mt-3">Requirements</h2>
       <p>
         The game requires permission to access your geolocation and compass
-        heading to play. No user data will be collected by the game or shared
-        with third-parties.
+        heading to play. No user data will be collected by or shared with
+        anyone.
       </p>
 
       <ul className="list-inside mt-2">
