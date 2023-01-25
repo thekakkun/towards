@@ -4,7 +4,7 @@ import {
   geoOrthographic,
   GeoPath,
   geoPath,
-  GeoProjection
+  GeoProjection,
 } from "d3-geo";
 import { pointers, select, Selection } from "d3-selection";
 import versor from "versor";
@@ -42,11 +42,7 @@ export default class D3Map {
     this.destination = getDestination(this.location, this.target.heading, 5000);
 
     this.projection = geoOrthographic()
-      .rotate([
-        -this.location.longitude,
-        -this.location.latitude,
-        this.target.heading,
-      ])
+      .rotate([-this.location.longitude, -this.location.latitude, 0])
       .fitSize(
         [containerEl.clientWidth, containerEl.clientHeight],
         geoJson as ExtendedFeatureCollection
