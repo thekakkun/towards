@@ -50,6 +50,7 @@ export function getRandomCity(
 
   /**
    * Checks to see that candidate city isn't too close to user location.
+   * Wouldn't want to have to guess the location of your own city.
    * @returns Whether city is too close
    */
   function cityTooClose(): boolean {

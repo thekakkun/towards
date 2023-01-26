@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Degrees } from "../types/cartography";
 import { SensorState } from "../types/game";
-import { degToRad } from "../utilities/cartography";
 
 /**
  * On being called, checks for orientation service availability
