@@ -19,17 +19,6 @@ export default function Map({ stages, coordinates }: MapProps) {
     throw new Error("stage is unscored.");
   }
 
-  // const d3Map = useCallback(
-  //   (targetElement: SVGSVGElement) => {
-  //     if (coordinates.value === null) {
-  //       throw new Error("Coordinates not available.");
-  //     }
-
-  //     return new D3Map(targetElement, target, coordinates.value);
-  //   },
-  //   [target, coordinates.value]
-  // );
-
   useEffect(() => {
     const d3Map = (targetElement: SVGSVGElement) => {
       if (coordinates.value === null) {

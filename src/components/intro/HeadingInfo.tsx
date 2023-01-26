@@ -25,7 +25,6 @@ export default function HeadingInfo(
       ) : coordinates.state === "denied" ? (
         <div>
           <p>Permission to access compass was denied.</p>
-          {/* TODO: add instructions for various devices. */}
         </div>
       ) : coordinates.state === "granted" ? (
         <p>Permission granted. Attempting to retrieve compass heading...</p>

@@ -61,8 +61,10 @@ export function getDistance(loc1: Coordinates, loc2: Coordinates) {
   const lat1 = degToRad(loc1.latitude);
   const lat2 = degToRad(loc2.latitude);
   const latDelta = lat2 - lat1;
-  // TODO: Beware of floating point errors here
-  const h = hav(latDelta) + Math.cos(lat1) * Math.cos(lat2) * hav(lonDelta);
+
+  let h = hav(latDelta) + Math.cos(lat1) * Math.cos(lat2) * hav(lonDelta);
+  // Clamp [0, 1] in case it exceeds ranges due to floating point error.
+  h = Math.min(Math.max(h, 0), 1);
 
   return 2 * R * Math.asin(Math.sqrt(h));
 }
