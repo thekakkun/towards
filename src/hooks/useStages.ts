@@ -26,6 +26,11 @@ export default function useStages(length = 5) {
     }
   }
 
+  /**
+   * Sets the next stage.
+   * @param coordinates The user's location.
+   * @returns The new stage.
+   */
   function setNext(
     coordinates: ReturnType<typeof useCoordinates>
   ): CurrentLocation {
@@ -41,6 +46,11 @@ export default function useStages(length = 5) {
     throw new Error("Max number of stages reached.");
   }
 
+  /**
+   * Re-rolls the current stage.
+   * @param coordinates The user's location
+   * @returns
+   */
   function reroll(coordinates: ReturnType<typeof useCoordinates>) {
     const newStage = getRandomCity(stages, coordinates);
 
@@ -54,6 +64,10 @@ export default function useStages(length = 5) {
     throw new Error("No stages in progress.");
   }
 
+  /**
+   * Update the score based on user's guess and set the next stage.
+   * @param guess Heading guessed by user.
+   */
   function makeGuess(guess: Guess): void {
     const nextStages = stages.map((stage) => {
       if (stage !== null && !("score" in stage)) {
@@ -66,10 +80,17 @@ export default function useStages(length = 5) {
     setStages(nextStages);
   }
 
+  /**
+   * Checks whether game is on final stage.
+   * @returns Whether user is on final stage.
+   */
   function onFinal(): boolean {
     return stages[length - 1] !== null;
   }
 
+  /**
+   * Reset the game
+   */
   function reset() {
     setStages(initialStages);
   }

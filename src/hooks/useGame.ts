@@ -6,23 +6,16 @@ import useCoordinates from "./useCoordinates";
 import useHeading from "./useHeading";
 import useStages from "./useStages";
 
-// export enum GameState {
-//   Permissions,
-//   Ready,
-//   Guess,
-//   Answer,
-//   LastAnswer,
-//   Outro,
-// }
-
 export default function useGame(
   stages: ReturnType<typeof useStages>,
   coordinates: ReturnType<typeof useCoordinates>,
   heading: ReturnType<typeof useHeading>
-  // position: ReturnType<typeof usePosition>
 ) {
   const [gameState, setGameState] = useState<GameState>("intro");
 
+  /**
+   * Advance the game state based on current state.
+   */
   function advance() {
     switch (gameState) {
       case "intro":
