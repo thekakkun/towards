@@ -31,7 +31,7 @@ export default function Game({
 
   const guessDisplay = (
     <Display
-      info={<GuessInfo {...stages}></GuessInfo>}
+      info={<GuessInfo {...{ stages, coordinates }}></GuessInfo>}
       visualization={<Compass {...heading}></Compass>}
     ></Display>
   );

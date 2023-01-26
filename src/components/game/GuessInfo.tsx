@@ -1,8 +1,14 @@
 import { useState } from "react";
+import useCoordinates from "../../hooks/useCoordinates";
 
 import useStages from "../../hooks/useStages";
 
-export default function GuessInfo(stages: ReturnType<typeof useStages>) {
+interface GuessInfoProps {
+  stages: ReturnType<typeof useStages>;
+  coordinates: ReturnType<typeof useCoordinates>;
+}
+
+export default function GuessInfo({ stages, coordinates }: GuessInfoProps) {
   const [rolls, setRolls] = useState<number>(3);
 
   return (
@@ -20,7 +26,7 @@ export default function GuessInfo(stages: ReturnType<typeof useStages>) {
         onClick={() => {
           if (rolls) {
             setRolls(rolls - 1);
-            stages.reroll();
+            stages.reroll(coordinates);
           }
         }}
       >

@@ -7,6 +7,7 @@ import {
   StageList,
 } from "../types/game";
 import { getRandomCity } from "../utilities/game";
+import useCoordinates from "./useCoordinates";
 
 export default function useStages(length = 5) {
   const initialStages: StageList = new Array(length).fill(null);
@@ -25,8 +26,10 @@ export default function useStages(length = 5) {
     }
   }
 
-  function setNext(): CurrentLocation {
-    const nextStage = getRandomCity(stages);
+  function setNext(
+    coordinates: ReturnType<typeof useCoordinates>
+  ): CurrentLocation {
+    const nextStage = getRandomCity(stages, coordinates);
 
     for (const [i, stage] of stages.entries()) {
       if (stage == null) {
@@ -38,8 +41,8 @@ export default function useStages(length = 5) {
     throw new Error("Max number of stages reached.");
   }
 
-  function reroll() {
-    const newStage = getRandomCity(stages);
+  function reroll(coordinates: ReturnType<typeof useCoordinates>) {
+    const newStage = getRandomCity(stages, coordinates);
 
     for (const [i, stage] of stages.entries()) {
       if (stage !== null && !("score" in stage)) {

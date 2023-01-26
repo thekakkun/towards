@@ -26,7 +26,7 @@ export default function useGame(
   function advance() {
     switch (gameState) {
       case "intro":
-        stages.setNext();
+        stages.setNext(coordinates);
         setGameState("guess");
         break;
 
@@ -46,7 +46,7 @@ export default function useGame(
         break;
 
       case "answer":
-        stages.setNext();
+        stages.setNext(coordinates);
         setGameState("guess");
 
         break;
