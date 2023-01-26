@@ -12,7 +12,7 @@ export default function GuessInfo({ stages, coordinates }: GuessInfoProps) {
   const [rolls, setRolls] = useState<number>(3);
 
   return (
-    <div className="grid grid-rows-1 grid-cols-[1fr_max-content]">
+    <div className="grid grid-rows-1 grid-cols-[1fr_max-content] gap-x-2">
       <p className="">Which way is...</p>
       <p className="text-lg text-emerald-700 font-semibold">
         {stages.current().city}, {stages.current().country}

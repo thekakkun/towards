@@ -12,12 +12,13 @@ export default function Compass({
         className="rounded-full w-full absolute"
         style={{
           transformStyle: "preserve-3d",
-          transform: `rotateX(45deg) rotate(-${heading}deg)`,
+          transform: `rotate(-${heading}deg)`,
+          // transform: `rotateX(45deg) rotate(-${heading}deg)`,
         }}
       ></Rose>
       <Needle
         title="Compass needle"
-        className="rounded-full w-full absolute h-2/5 top-[30%]"
+        className="rounded-full w-full absolute h-1/2 top-[23%]"
       ></Needle>
     </div>
   );
