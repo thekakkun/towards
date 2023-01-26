@@ -19,15 +19,29 @@ export default function Map({ stages, coordinates }: MapProps) {
     throw new Error("stage is unscored.");
   }
 
+  // const d3Map = useCallback(
+  //   (targetElement: SVGSVGElement) => {
+  //     if (coordinates.value === null) {
+  //       throw new Error("Coordinates not available.");
+  //     }
+
+  //     return new D3Map(targetElement, target, coordinates.value);
+  //   },
+  //   [target, coordinates.value]
+  // );
+
   useEffect(() => {
-    if (coordinates.value === null) {
-      throw new Error("Coordinates not available.");
-    } else if (svgRef.current) {
-      new D3Map(svgRef.current, target, coordinates.value);
+    const d3Map = (targetElement: SVGSVGElement) => {
+      if (coordinates.value === null) {
+        throw new Error("Coordinates not available.");
+      }
+
+      return new D3Map(targetElement, target, coordinates.value);
+    };
+    if (svgRef.current) {
+      d3Map(svgRef.current);
     }
-    // TODO: Fix this!!!
-    // eslint-disable-next-line
-  }, [svgRef]);
+  }, [svgRef, coordinates.value, target]);
 
   const globe = <path id="globe" fill={colors.blue[100]}></path>;
   const countries = (
@@ -43,10 +57,9 @@ export default function Map({ stages, coordinates }: MapProps) {
         strokeWidth="2px"
       ></path>
       <path id="destPoint" fill={colors.red[600]}></path>
-      <text
-        id="destLabel"
-        dominantBaseline="middle"
-      >{target.city}, {target.country}</text>
+      <text id="destLabel" dominantBaseline="middle">
+        {target.city}, {target.country}
+      </text>
     </g>
   );
   const guess = (

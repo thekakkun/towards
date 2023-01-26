@@ -31,4 +31,4 @@ The game requires permission to access your geolocation and compass heading to p
 - [x] Get coordinates and heading working on Safari
 - [x] Clean up visual style
 - [x] Create better list of potential targets (use Wikidata)
-- [ ] Add criteria for target (not too close, not too far)
+- [x] Add criteria for target (not too close)
