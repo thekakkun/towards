@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Degrees } from "../types/cartography";
 import { SensorState } from "../types/game";
+import { degToRad } from "../utilities/cartography";
 
 /**
  * On being called, checks for orientation service availability
@@ -109,8 +110,8 @@ export default function useHeading(): {
   ) {
     if ("webkitCompassHeading" in orientation) {
       setHeading(orientation.webkitCompassHeading);
-    } else if (orientation.absolute && orientation.alpha) {
-      setHeading(359 - orientation.alpha);
+    } else if (orientation.absolute) {
+      setHeading(compassHeading(orientation));
     } else {
       setSensorState("unavailable");
     }
@@ -126,4 +127,43 @@ interface webkitDeviceOrientationEvent extends DeviceOrientationEvent {
   webkitCompassHeading: number;
   webkitCompassAccuracy: number;
   requestPermission: () => Promise<PermissionState>;
+}
+
+/**
+ * Calculate heading from device orientation event.
+ * via https://w3c.github.io/deviceorientation/#worked-example
+ * @param orientation: The device orientation event from the listener.
+ * @returns Compass heading in degrees.
+ */
+function compassHeading({
+  alpha,
+  beta,
+  gamma,
+}: DeviceOrientationEvent): Degrees {
+  var _x = beta ? degToRad(beta) : 0; // beta value
+  var _y = gamma ? degToRad(gamma) : 0; // gamma value
+  var _z = alpha ? degToRad(alpha) : 0; // alpha value
+
+  var cX = Math.cos(_x);
+  var cY = Math.cos(_y);
+  var cZ = Math.cos(_z);
+  var sX = Math.sin(_x);
+  var sY = Math.sin(_y);
+  var sZ = Math.sin(_z);
+
+  // Calculate Vx and Vy components
+  var Vx = -cZ * sY - sZ * sX * cY;
+  var Vy = -sZ * sY + cZ * sX * cY;
+
+  // Calculate compass heading
+  var compassHeading = Math.atan(Vx / Vy);
+
+  // Convert compass heading to use whole unit circle
+  if (Vy < 0) {
+    compassHeading += Math.PI;
+  } else if (Vx < 0) {
+    compassHeading += 2 * Math.PI;
+  }
+
+  return compassHeading * (180 / Math.PI); // Compass Heading (in degrees)
 }
