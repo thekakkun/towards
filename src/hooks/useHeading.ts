@@ -144,7 +144,7 @@ function compassHeading({
   var _y = gamma ? degToRad(gamma) : 0; // gamma value
   var _z = alpha ? degToRad(alpha) : 0; // alpha value
 
-  var cX = Math.cos(_x);
+  // var cX = Math.cos(_x);
   var cY = Math.cos(_y);
   var cZ = Math.cos(_z);
   var sX = Math.sin(_x);
