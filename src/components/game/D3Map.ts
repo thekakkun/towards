@@ -26,6 +26,7 @@ export default class D3Map {
   projection: GeoProjection;
   geoGenerator: GeoPath;
   sphere: GeoPermissibleObjects;
+  arrow: GeoPermissibleObjects;
 
   /**
    * Create a D3Map object.
@@ -45,6 +46,11 @@ export default class D3Map {
     this.destination = getDestination(this.location, this.target.heading, 5000);
     this.sphere = {
       type: "Sphere",
+    };
+
+    this.arrow = {
+      type: "Polygon",
+      coordinates: [this.getArrowCoords()],
     };
 
     this.projection = geoOrthographic()
@@ -116,16 +122,9 @@ export default class D3Map {
     }
 
     // Guess by user
-    this.svg.select<SVGPathElement>("#guessLine").attr(
-      "d",
-      this.geoGenerator({
-        type: "LineString",
-        coordinates: [
-          [this.location.longitude, this.location.latitude],
-          [this.destination.longitude, this.destination.latitude],
-        ],
-      })
-    );
+    this.svg
+      .select<SVGPathElement>("#guessLine")
+      .attr("d", this.geoGenerator(this.arrow));
   }
 
   /**
@@ -215,5 +214,31 @@ export default class D3Map {
     return drag<SVGSVGElement, unknown>()
       .on("start", dragStarted)
       .on("drag", dragged);
+  }
+
+  /**
+   * Create polygon for arrow, based off needle svg shape and heading
+   * @returns coordinates for arrow polygon
+   */
+  getArrowCoords() {
+    // Coordinates of arrow polygon, in radial coordinates from center
+    // Measured from needle svg.
+    let coords = [
+      [34.79, -90], // tip, clockwise from here.
+      [27.1, -80.63],
+      [35.06, 82.77],
+      [26.74, 90], // tail
+      [35.06, 97.23],
+      [27.1, -99.37],
+    ].map(([dist, angle]) => [dist, angle + 90]); // rotate so tip is at 0 degrees
+
+    const arrowLength = 2500;
+    const scale = arrowLength / (coords[0][0] + coords[3][0]);
+    let arrowPolygon = coords.map(([dist, angle]) =>
+      getDestination(this.location, this.target.heading + angle, dist * scale)
+    );
+
+    arrowPolygon.push(arrowPolygon[0]); // close the polygon
+    return arrowPolygon.map((coords) => [coords.longitude, coords.latitude]);
   }
 }
