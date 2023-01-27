@@ -1,10 +1,10 @@
 # 🧭 Over Yonder
 
-[Play the game here!](https://thekakkun.github.io/over-yonder)
-
 ## About
 
 This is a location-based geography game for smartphones. Try and guess the shortest-distance direction for each city.
+
+[Play the game here!](https://thekakkun.github.io/over-yonder)
 
 ## Requirements
 
