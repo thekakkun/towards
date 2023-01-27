@@ -29,6 +29,7 @@ export default function CoordinatesInfo(
             It may be blocked in the OS or browser settings. Refer below for
             potential solutions.
           </p>
+          <p>You may need to reload the page for changes to take effect.</p>
           <ul>
             <li>
               <span className="font-semibold">iOS</span>

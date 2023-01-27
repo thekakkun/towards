@@ -17,7 +17,7 @@ export default function Compass({
       ></Rose>
       <Needle
         title="Compass needle"
-        className="rounded-full w-full absolute h-1/2 top-[23%]"
+        className="rounded-full w-full absolute h-[45%] top-[27.5%]"
       ></Needle>
     </div>
   );

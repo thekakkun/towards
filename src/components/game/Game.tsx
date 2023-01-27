@@ -5,7 +5,6 @@ import useStages from "../../hooks/useStages";
 
 import AnswerInfo from "./AnswerInfo";
 import Compass from "./Compass";
-import Display from "./Display";
 import GuessInfo from "./GuessInfo";
 import Map from "./Map";
 import Progress from "./Progress";
@@ -29,23 +28,20 @@ export default function Game({
     throw new Error("Coordinates not available.");
   }
 
-  const guessDisplay = (
-    <Display
-      info={<GuessInfo {...{ stages, coordinates }}></GuessInfo>}
-      visualization={<Compass {...heading}></Compass>}
-    ></Display>
-  );
-  const answerDisplay = (
-    <Display
-      info={<AnswerInfo {...stages}></AnswerInfo>}
-      visualization={<Map {...{ stages, coordinates }}></Map>}
-    ></Display>
-  );
-
   return (
     <div className="h-full flex flex-col gap-3">
       <Progress {...stages}></Progress>
-      {game.state === "guess" ? guessDisplay : answerDisplay}
+      {game.state === "guess" ? (
+        <>
+          <GuessInfo {...{ stages, coordinates }}></GuessInfo>
+          <Compass {...heading}></Compass>
+        </>
+      ) : (
+        <>
+          <AnswerInfo {...stages}></AnswerInfo>
+          <Map {...{ stages, coordinates }}></Map>
+        </>
+      )}
     </div>
   );
 }
