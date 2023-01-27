@@ -54,18 +54,7 @@ export default function Map({ stages, coordinates }: MapProps) {
   );
   const guess = (
     <g>
-      <path
-        id="guessLine"
-        fillOpacity={0}
-        stroke={colors.emerald[500]}
-        strokeLinecap="round"
-        strokeWidth="2px"
-      ></path>
-      <text cursor="default" fill={colors.emerald[800]}>
-        <textPath href="#guessLine" startOffset="10">
-          Your guess
-        </textPath>
-      </text>
+      <path id="guessLine" fill={colors.emerald[600]}></path>
     </g>
   );
 
