@@ -4,6 +4,7 @@ import {
   geoOrthographic,
   GeoPath,
   geoPath,
+  GeoPermissibleObjects,
   GeoProjection,
 } from "d3-geo";
 import { pointers, select, Selection } from "d3-selection";
@@ -24,12 +25,14 @@ export default class D3Map {
   location: Coordinates;
   projection: GeoProjection;
   geoGenerator: GeoPath;
+  sphere: GeoPermissibleObjects;
 
   /**
    * Create a D3Map object.
    * @param containerEl The element to draw the map on.
    * @param target Target location for stage.
    * @param location User's current location.
+   * @param
    */
   constructor(
     containerEl: SVGSVGElement,
@@ -40,12 +43,15 @@ export default class D3Map {
     this.target = target;
     this.location = location;
     this.destination = getDestination(this.location, this.target.heading, 5000);
+    this.sphere = {
+      type: "Sphere",
+    };
 
     this.projection = geoOrthographic()
       .rotate([-this.location.longitude, -this.location.latitude, 0])
       .fitSize(
         [containerEl.clientWidth, containerEl.clientHeight],
-        geoJson as ExtendedFeatureCollection
+        this.sphere
       );
     this.geoGenerator = geoPath(this.projection);
 
@@ -58,12 +64,9 @@ export default class D3Map {
   /** Draw the map. */
   draw() {
     // The globe background
-    this.svg.select<SVGPathElement>("#globe").attr(
-      "d",
-      this.geoGenerator({
-        type: "Sphere",
-      })
-    );
+    this.svg
+      .select<SVGPathElement>("#globe")
+      .attr("d", this.geoGenerator(this.sphere));
 
     // The countries
     const u = this.svg

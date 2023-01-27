@@ -2,7 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   viewBox="0 0 80.018082 255.78497"
+   width="33.345673"
+   height="262.94775"
+   viewBox="0 0 33.345673 262.94775"
    version="1.1"
    id="svg5"
    xmlns="http://www.w3.org/2000/svg"
@@ -10,16 +12,11 @@
   <defs
      id="defs2" />
   <g
-     id="layer1"
-     style="display:inline"
-     transform="translate(-184.99095,-97.107513)">
+     id="layer3"
+     transform="translate(-208.32716,-93.526108)">
     <path
-       style="fill:#047857;fill-opacity:1;stroke:none;stroke-width:0.311499px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 224.99936,105.67654 v 245.03201 l 38.32709,-37.32082 z"
-       id="path2385" />
-    <path
-       style="display:inline;fill:none;stroke:#047857;stroke-width:3.11499;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-       d="m 224.99936,105.67654 -38.32708,207.00109 38.32708,38.03092 38.32709,-37.32082 z"
-       id="path1655" />
+       style="fill:#059669;fill-opacity:1;stroke:none;stroke-width:0.68447px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 225,93.526109 -16.67284,30.405581 v 232.5422 L 225,326.0683 l 16.67284,30.40559 v -232.5422 z"
+       id="path1803" />
   </g>
 </svg>

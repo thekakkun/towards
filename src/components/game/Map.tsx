@@ -27,6 +27,7 @@ export default function Map({ stages, coordinates }: MapProps) {
 
       return new D3Map(targetElement, target, coordinates.value);
     };
+
     if (svgRef.current) {
       d3Map(svgRef.current);
     }
@@ -69,8 +70,8 @@ export default function Map({ stages, coordinates }: MapProps) {
   );
 
   return (
-    <div className="h-full">
-      <svg ref={svgRef} id="map" className="mx-auto w-full aspect-square">
+    <div className="w-full aspect-square">
+      <svg ref={svgRef} id="map" className="w-full h-full">
         {globe}
         {countries}
         {destination}
