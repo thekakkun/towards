@@ -1,7 +1,5 @@
 import Button from "./components/Button";
-import Content from "./components/Content";
 import Game from "./components/game/Game";
-import Header from "./components/Header";
 import Intro from "./components/intro/Intro";
 import Outro from "./components/Outro";
 import useCoordinates from "./hooks/useCoordinates";
@@ -17,8 +15,11 @@ function App() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <Header></Header>
-      <Content>
+      <header className="flex-none w-full pt-4 px-4">
+        <h1 className="text-stone-800 text-xl font-bold">🧭 Over Yonder!</h1>
+      </header>
+
+      <div className="w-full  mt-4 px-4">
         {game.state === "intro" ? (
           <Intro {...{ coordinates, heading }}></Intro>
         ) : game.state === "outro" ? (
@@ -26,7 +27,7 @@ function App() {
         ) : (
           <Game {...{ game, coordinates, heading, stages }}></Game>
         )}
-      </Content>
+      </div>
       <Button {...{ game, coordinates, heading }}></Button>
     </div>
   );
