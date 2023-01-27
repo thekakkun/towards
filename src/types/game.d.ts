@@ -1,7 +1,5 @@
 import { Dispatch } from "react";
 
-import useCoordinates from "../hooks/useCoordinates";
-import useHeading from "../hooks/useHeading";
 import { Coordinates, Location } from "./cartography";
 import { Degrees } from "./math";
 

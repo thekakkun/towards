@@ -97,7 +97,7 @@ export default function CoordinatesInfo(
           </button>
         </div>
       ) : coordinates.state === "ready" ? (
-        <p>Good to go!</p>
+        <p>Ready!</p>
       ) : null}
     </li>
   );
