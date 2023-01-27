@@ -11,16 +11,13 @@ interface IntroProps {
 export default function Intro({ coordinates, heading }: IntroProps) {
   return (
     <div className="mb-28">
-      <p>
-        In this geography game, try and guess which direction the specified city
-        is from your current location.
-      </p>
+      <p>This is a location-based geography game for smartphones.</p>
       <ul className="list-disc pl-4">
+        <li>Try and guess the shortest-distance direction for each city.</li>
         <li>
-          You'll be given five cities, each worth 200 points for a total score
-          out of 1,000.
+          Don't know that location? You can re-roll your target city up to 3
+          times per game.
         </li>
-        <li>You can re-roll your target city up to 3 times per game.</li>
       </ul>
 
       <h2 className="text-lg text-stone-800 font-bold mt-3">Requirements</h2>

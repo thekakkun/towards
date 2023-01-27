@@ -19,8 +19,8 @@ export default function HeadingInfo(
         <p>Compass state unknown.</p>
       ) : coordinates.state === "unavailable" ? (
         <p>
-          Compass services are unavailable on this device. Please double
-          check the list of supported browsers below.
+          Compass services are unavailable on this device. Please double check
+          the list of supported browsers below.
         </p>
       ) : coordinates.state === "denied" ? (
         <div>
@@ -39,7 +39,7 @@ export default function HeadingInfo(
           </button>
         </div>
       ) : coordinates.state === "ready" ? (
-        <p>Good to go!</p>
+        <p>Ready!</p>
       ) : null}
     </li>
   );

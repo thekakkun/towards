@@ -63,8 +63,8 @@ export default function Map({ stages, coordinates }: MapProps) {
       <svg ref={svgRef} id="map" className="w-full h-full">
         {globe}
         {countries}
-        {destination}
         {guess}
+        {destination}
       </svg>
     </div>
   );

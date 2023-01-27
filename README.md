@@ -4,11 +4,7 @@
 
 ## About
 
-In this geography game, try and guess which direction the specified city is from your current location.
-
-- You'll be given five cities, each worth 200 points for a total score out of
-  1,000.
-- You can re-roll your target city up to 3 times per game.
+This is a location-based geography game for smartphones. Try and guess the shortest-distance direction for each city.
 
 ## Requirements
 
