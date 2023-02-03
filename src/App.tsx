@@ -18,6 +18,7 @@ function App() {
       <header className="flex-none w-full pt-4 px-4">
         <h1 className="text-stone-800 text-xl font-bold">🧭 Over Yonder!</h1>
       </header>
+      <button onClick={coordinates.bump}>bump</button>
 
       <div className="w-full  mt-4 px-4">
         {game.state === "intro" ? (

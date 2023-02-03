@@ -12,6 +12,7 @@ export default function useCoordinates(): {
   state: SensorState;
   requestAccess: () => void;
   value: Coordinates | null;
+  bump: () => void;
 } {
   const [sensorState, setSensorState] = useState<SensorState>("unknown");
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
@@ -84,9 +85,19 @@ export default function useCoordinates(): {
     return watchId;
   }
 
+  // debug function to effects of coordinates changing.
+  function bump() {
+    setCoordinates((coords) =>
+      coords
+        ? { latitude: coords.latitude + 10, longitude: coords.longitude }
+        : coords
+    );
+  }
+
   return {
     state: sensorState,
     requestAccess,
     value: coordinates,
+    bump,
   };
 }

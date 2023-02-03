@@ -11,18 +11,23 @@ interface IntroProps {
 export default function Intro({ coordinates, heading }: IntroProps) {
   return (
     <div className="mb-28">
-      <p>This is a location-based geography game for smartphones.</p>
+      <p>
+        <span className="font-semibold">
+          Guess the shortest-distance direction to the target city
+        </span>{" "}
+        in this location-based geography game for smartphone.
+      </p>
       <ul className="list-disc pl-4">
-        <li>Try and guess the shortest-distance direction for each city.</li>
+        <li>You'll be given five cities, each worth 200 points.</li>
         <li>
-          Don't know that location? You can re-roll your target city up to 3
+          Don't know where the city is? You can re-roll your target city up to 3
           times per game.
         </li>
       </ul>
 
       <h2 className="text-lg text-stone-800 font-bold mt-3">Requirements</h2>
       <p>
-        The game requires permission to access your geolocation and compass
+        This game requires permission to access your location and compass
         heading to play. No user data will be collected by or shared with
         anyone.
       </p>
@@ -38,10 +43,10 @@ export default function Intro({ coordinates, heading }: IntroProps) {
 
       <ul className="list-disc pl-4">
         <li>
-          <span className="font-semibold">Android OS</span>: Chrome
+          <span className="font-semibold">iOS</span>: Safari
         </li>
         <li>
-          <span className="font-semibold">iOS</span>: Safari
+          <span className="font-semibold">Android OS</span>: Chrome
         </li>
       </ul>
 

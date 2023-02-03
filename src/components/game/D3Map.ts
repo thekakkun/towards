@@ -7,7 +7,7 @@ import {
   GeoPermissibleObjects,
   GeoProjection,
 } from "d3-geo";
-import { pointers, select, Selection } from "d3-selection";
+import { pointers, select } from "d3-selection";
 import versor from "versor";
 
 import geoJson from "../../assets/data/ne_110m_admin_0_countries.json";
@@ -19,86 +19,102 @@ import { getDestination } from "../../utilities/cartography";
  * Draw a map, using D3 in the specified element.
  */
 export default class D3Map {
-  svg: Selection<SVGSVGElement, unknown, null, undefined>;
+  // svg: Selection<SVGSVGElement, unknown, null, undefined>;
   target: CompletedLocation;
   destination: Coordinates;
   location: Coordinates;
   projection: GeoProjection;
   geoGenerator: GeoPath;
-  sphere: GeoPermissibleObjects;
   arrow: GeoPermissibleObjects;
 
   /**
    * Create a D3Map object.
-   * @param containerEl The element to draw the map on.
+  //  * @param containerEl The element to draw the map on.
    * @param target Target location for stage.
    * @param location User's current location.
-   * @param
    */
   constructor(
-    containerEl: SVGSVGElement,
+    // containerEl: SVGSVGElement,
     target: CompletedLocation,
     location: Coordinates
   ) {
-    this.svg = select(containerEl);
+    // this.svg = select(containerEl);
     this.target = target;
     this.location = location;
     this.destination = getDestination(this.location, this.target.heading, 5000);
-    this.sphere = {
-      type: "Sphere",
-    };
 
     this.arrow = {
       type: "Polygon",
       coordinates: [this.getArrowCoords()],
     };
 
-    this.projection = geoOrthographic()
-      .rotate([-this.location.longitude, -this.location.latitude, 0])
-      .fitSize(
-        [containerEl.clientWidth, containerEl.clientHeight],
-        this.sphere
-      );
+    this.projection = geoOrthographic();
+    // .rotate([-this.location.longitude, -this.location.latitude, 0])
+    // .fitSize([containerEl.clientWidth, containerEl.clientHeight], {
+    //   type: "Sphere",
+    // });
     this.geoGenerator = geoPath(this.projection);
 
+    // this.drag = this.drag.bind(this);
+    // this.svg
+    //   .call(this.drag().on("drag.render", () => this.draw()))
+    //   .call(() => this.draw());
+  }
+
+  init(container: SVGSVGElement) {
+    this.projection
+      .rotate([-this.location.longitude, -this.location.latitude, 0])
+      .fitSize([container.clientWidth, container.clientHeight], {
+        type: "Sphere",
+      });
+
     this.drag = this.drag.bind(this);
-    this.svg
-      .call(this.drag().on("drag.render", () => this.draw()))
-      .call(() => this.draw());
+    select(container)
+      .call(this.drag(container).on("drag.render", () => this.draw(container)))
+      .call(() => this.draw(container));
   }
 
   /** Draw the map. */
-  draw() {
+  draw(container: SVGSVGElement) {
     // The globe background
-    this.svg
+    select(container)
       .select<SVGPathElement>("#globe")
-      .attr("d", this.geoGenerator(this.sphere));
+      .attr(
+        "d",
+        this.geoGenerator({
+          type: "Sphere",
+        })
+      );
 
     // The countries
-    const u = this.svg
+    const u = select(container)
       .select<SVGGElement>("#countries")
       .selectAll<SVGPathElement, ExtendedFeatureCollection>("path")
       .data((geoJson as ExtendedFeatureCollection).features);
     u.enter().append("path").merge(u).attr("d", this.geoGenerator);
 
     // Line to the destination
-    this.svg.select<SVGPathElement>("#destLine").attr(
-      "d",
-      this.geoGenerator({
-        type: "LineString",
-        coordinates: [
-          [this.location.longitude, this.location.latitude],
-          [this.target.longitude, this.target.latitude],
-        ],
-      })
-    );
-    this.svg.select<SVGPathElement>("#destPoint").attr(
-      "d",
-      this.geoGenerator({
-        type: "Point",
-        coordinates: [this.target.longitude, this.target.latitude],
-      })
-    );
+    select(container)
+      .select<SVGPathElement>("#destLine")
+      .attr(
+        "d",
+        this.geoGenerator({
+          type: "LineString",
+          coordinates: [
+            [this.location.longitude, this.location.latitude],
+            [this.target.longitude, this.target.latitude],
+          ],
+        })
+      );
+    select(container)
+      .select<SVGPathElement>("#destPoint")
+      .attr(
+        "d",
+        this.geoGenerator({
+          type: "Point",
+          coordinates: [this.target.longitude, this.target.latitude],
+        })
+      );
 
     const destPoint = this.projection([
       this.target.longitude,
@@ -106,7 +122,7 @@ export default class D3Map {
     ]);
 
     if (destPoint !== null) {
-      this.svg
+      select(container)
         .select<SVGTextElement>("#destLabel")
         .attr("x", destPoint[0] + 10)
         .attr("y", destPoint[1])
@@ -122,7 +138,7 @@ export default class D3Map {
     }
 
     // Guess by user
-    this.svg
+    select(container)
       .select<SVGPathElement>("#guessLine")
       .attr("d", this.geoGenerator(this.arrow));
   }
@@ -131,7 +147,7 @@ export default class D3Map {
    * Define the drag behavior.
    * @returns the drag behavior object.
    */
-  drag() {
+  drag(container: SVGSVGElement) {
     let v0: [number, number, number],
       q0: [number, number, number, number],
       r0: [number, number, number],
@@ -141,7 +157,7 @@ export default class D3Map {
     const pointer = (
       event: DragEvent
     ): [number, number] | [number, number, number] => {
-      const t = pointers(event, this.svg.node());
+      const t = pointers(event, select(container).node());
 
       if (t.length !== l) {
         l = t.length;

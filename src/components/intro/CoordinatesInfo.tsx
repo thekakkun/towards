@@ -13,7 +13,7 @@ export default function CoordinatesInfo(
           : "bg-yellow-100 border-yellow-400"
       }`}
     >
-      <h2 className="font-bold">Location Services</h2>
+      <h2 className="font-bold mb-1">Location</h2>
 
       {coordinates.state === "unknown" ? (
         <p>Location Service state unknown.</p>
@@ -24,14 +24,15 @@ export default function CoordinatesInfo(
         </p>
       ) : coordinates.state === "denied" ? (
         <div>
-          <p>Permission to access location was denied.</p>
-          <p>
-            It may be blocked in the OS or browser settings. Refer below for
-            potential solutions.
+          <p className="font-semibold">
+            Permission to access location was denied.
           </p>
-          <p>You may need to reload the page for changes to take effect.</p>
+          <p>
+            OS or browser settings may need to be updated. You may need to
+            reload the page for changes to take effect.
+          </p>
           <ul>
-            <li>
+            <li className="mt-1">
               <span className="font-semibold">iOS</span>
               <ul className="list-disc ml-4">
                 <li>
@@ -56,7 +57,7 @@ export default function CoordinatesInfo(
                 </li>
               </ul>
             </li>
-            <li>
+            <li className="mt-1">
               <span className="font-semibold">Android</span>
               <ul className="list-disc ml-4">
                 <li>

@@ -13,7 +13,7 @@ export default function HeadingInfo(
           : "bg-yellow-100 border-yellow-400"
       }`}
     >
-      <h2 className="font-bold">Compass</h2>
+      <h2 className="font-bold mb-1">Compass</h2>
 
       {coordinates.state === "unknown" ? (
         <p>Compass state unknown.</p>
