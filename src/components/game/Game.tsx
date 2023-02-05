@@ -6,7 +6,7 @@ import useStages from "../../hooks/useStages";
 import AnswerInfo from "./AnswerInfo";
 import Compass from "./Compass";
 import GuessInfo from "./GuessInfo";
-import Map from "./Map";
+import Map from "./map/Map";
 import Progress from "./Progress";
 
 interface GameProps {

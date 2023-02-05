@@ -32,6 +32,7 @@ export default function useMap(
     -coordinates.value.latitude,
     0,
   ]);
+
   const projection = useMemo(() => geoOrthographic(), []);
   const geoGenerator = useMemo(() => geoPath(projection), [projection]);
 
@@ -68,6 +69,8 @@ export default function useMap(
       );
     }
   }, [containerRef, projection, geoGenerator, coordinates.value, stages]);
+
+  return projection;
 }
 
 /** Draw the map. */
@@ -150,8 +153,6 @@ function draw(
         );
     }
   }
-
-  return projection;
 }
 
 /**
@@ -169,6 +170,7 @@ function handleDrag(projection: GeoProjection, container: SVGSVGElement) {
     event: DragEvent
   ): [number, number] | [number, number, number] => {
     const t = pointers(event, select(container).node());
+    console.log(event)
 
     if (t.length !== l) {
       l = t.length;
