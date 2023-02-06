@@ -1,5 +1,5 @@
 import { drag } from "d3-drag";
-import { geoOrthographic, GeoProjection } from "d3-geo";
+import { geoOrthographic, geoPath, GeoProjection } from "d3-geo";
 import { select, pointers } from "d3-selection";
 import { useState, useRef, useEffect } from "react";
 import versor from "versor";
@@ -29,45 +29,47 @@ export default function Map({ stages, coordinates }: MapProps) {
     0,
   ]);
   const mapRef = useRef<SVGSVGElement>(null);
-  const [projection, setProjection] = useState(geoOrthographic);
+  const projectionRef = useRef(geoOrthographic());
+  // const [projection, setProjection] = useState(geoOrthographic);
+  const [geoGenerator, setGeoGenerator] = useState(() =>
+    geoPath(projectionRef.current)
+  );
 
   useEffect(() => {
     if (mapRef.current) {
       const map = mapRef.current;
-      setProjection((p: GeoProjection) =>
-        p.fitSize([map.clientWidth, map.clientHeight], {
-          type: "Sphere",
-        })
-      );
+      projectionRef.current.fitSize([map.clientWidth, map.clientHeight], {
+        type: "Sphere",
+      });
+
+      // setProjection((p: GeoProjection) =>
+      //   p.fitSize([map.clientWidth, map.clientHeight], {
+      //     type: "Sphere",
+      //   })
+      // );
 
       select(map).call(
         handleDrag
-          .call(map, projection, setRotation)
+          .call(map, projectionRef.current, setRotation)
           .on("drag.render", () => {})
       );
     }
-  }, [mapRef, projection, rotation]);
+  }, [mapRef, projectionRef, rotation]);
 
   useEffect(() => {
-    setProjection((p: GeoProjection) => {
-      return geoOrthographic()
-        .scale(p.scale())
-        .translate(p.translate())
-        .rotate(rotation);
-    });
-    console.log(projection);
+    setGeoGenerator(() => geoPath(projectionRef.current.rotate(rotation)));
   }, [rotation]);
 
   return (
     <div className="w-full aspect-square">
       <svg ref={mapRef} id="map" className="w-full h-full">
-        <Globe projection={projection}></Globe>
-        <Countries projection={projection}></Countries>
-        <Destination
+        <Globe geoGenerator={geoGenerator}></Globe>
+        <Countries geoGenerator={geoGenerator}></Countries>
+        {/* <Destination
           projection={projection}
           location={coordinates.value}
           target={target}
-        ></Destination>
+        ></Destination> */}
       </svg>
     </div>
   );
