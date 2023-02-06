@@ -49,6 +49,7 @@ export default function Map({ stages, coordinates }: MapProps) {
       projectionRef.current.fitSize([map.clientWidth, map.clientHeight], {
         type: "Sphere",
       });
+      setGeoGenerator(() => geoPath(projectionRef.current));
 
       select(map).call(
         handleDrag
