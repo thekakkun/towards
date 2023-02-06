@@ -1,5 +1,11 @@
 import { drag } from "d3-drag";
-import { geoOrthographic, geoPath, GeoProjection } from "d3-geo";
+import {
+  geoOrthographic,
+  GeoPath,
+  geoPath,
+  GeoPermissibleObjects,
+  GeoProjection,
+} from "d3-geo";
 import { select, pointers } from "d3-selection";
 import { useState, useRef, useEffect } from "react";
 import versor from "versor";
@@ -9,6 +15,7 @@ import useStages from "../../../hooks/useStages";
 import Countries from "./Countries";
 import Destination from "./Destination";
 import Globe from "./Globe";
+import Guess from "./Guess";
 
 interface MapProps {
   stages: ReturnType<typeof useStages>;
@@ -23,14 +30,15 @@ export default function Map({ stages, coordinates }: MapProps) {
     throw new Error("User coordinates unavailable");
   }
 
-  const [rotation, setRotation] = useState<[number, number, number]>([
-    -coordinates.value.longitude,
-    -coordinates.value.latitude,
-    0,
-  ]);
   const mapRef = useRef<SVGSVGElement>(null);
-  const projectionRef = useRef(geoOrthographic());
-  // const [projection, setProjection] = useState(geoOrthographic);
+  const projectionRef = useRef(
+    geoOrthographic().rotate([
+      -coordinates.value.longitude,
+      -coordinates.value.latitude,
+      0,
+    ])
+  );
+
   const [geoGenerator, setGeoGenerator] = useState(() =>
     geoPath(projectionRef.current)
   );
@@ -42,34 +50,30 @@ export default function Map({ stages, coordinates }: MapProps) {
         type: "Sphere",
       });
 
-      // setProjection((p: GeoProjection) =>
-      //   p.fitSize([map.clientWidth, map.clientHeight], {
-      //     type: "Sphere",
-      //   })
-      // );
-
       select(map).call(
         handleDrag
-          .call(map, projectionRef.current, setRotation)
+          .call(map, projectionRef.current, setGeoGenerator)
           .on("drag.render", () => {})
       );
     }
-  }, [mapRef, projectionRef, rotation]);
-
-  useEffect(() => {
-    setGeoGenerator(() => geoPath(projectionRef.current.rotate(rotation)));
-  }, [rotation]);
+  }, [mapRef, projectionRef]);
 
   return (
     <div className="w-full aspect-square">
       <svg ref={mapRef} id="map" className="w-full h-full">
         <Globe geoGenerator={geoGenerator}></Globe>
         <Countries geoGenerator={geoGenerator}></Countries>
-        {/* <Destination
-          projection={projection}
+        <Destination
+          projection={projectionRef.current}
+          geoGenerator={geoGenerator}
           location={coordinates.value}
           target={target}
-        ></Destination> */}
+        ></Destination>
+        <Guess
+          geoGenerator={geoGenerator}
+          location={coordinates.value}
+          target={target}
+        ></Guess>
       </svg>
     </div>
   );
@@ -82,7 +86,9 @@ export default function Map({ stages, coordinates }: MapProps) {
 function handleDrag(
   this: SVGSVGElement,
   projection: GeoProjection,
-  setRotation: React.Dispatch<React.SetStateAction<[number, number, number]>>
+  setGeoGenerator: React.Dispatch<
+    React.SetStateAction<GeoPath<any, GeoPermissibleObjects>>
+  >
 ) {
   let v0: [number, number, number],
     q0: [number, number, number, number],
@@ -130,6 +136,7 @@ function handleDrag(
     );
 
     q0 = versor((r0 = projection.rotate()));
+    setGeoGenerator(() => geoPath(projection));
   };
 
   /**
@@ -139,7 +146,6 @@ function handleDrag(
   const dragged = (event: DragEvent) => {
     const [px, py, pa] = pointer(event);
 
-    setRotation(r0);
     const v1 = versor.cartesian(
       projection.rotate(r0).invert?.([px, py]) ??
         (() => {
@@ -157,7 +163,8 @@ function handleDrag(
       q1 = versor.multiply([Math.sqrt(1 - s * s), 0, 0, c * s], q1);
     }
 
-    setRotation(versor.rotation(q1));
+    projection.rotate(versor.rotation(q1));
+    setGeoGenerator(() => geoPath(projection));
 
     // In vicinity of the antipode (unstable) of q0, restart.
     if (delta[0] < 0.7) {

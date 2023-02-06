@@ -1,4 +1,4 @@
-import { GeoPath, geoPath, GeoPermissibleObjects, GeoProjection } from "d3-geo";
+import { GeoPath, GeoPermissibleObjects } from "d3-geo";
 import { select } from "d3-selection";
 import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";

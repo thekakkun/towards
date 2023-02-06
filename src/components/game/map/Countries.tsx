@@ -1,9 +1,7 @@
 import {
   ExtendedFeatureCollection,
   GeoPath,
-  geoPath,
   GeoPermissibleObjects,
-  GeoProjection,
 } from "d3-geo";
 import { select } from "d3-selection";
 import { useEffect, useRef } from "react";

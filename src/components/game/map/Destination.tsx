@@ -1,4 +1,4 @@
-import { GeoProjection, geoPath } from "d3-geo";
+import { GeoProjection,  GeoPath, GeoPermissibleObjects } from "d3-geo";
 import { select } from "d3-selection";
 import { useRef, useEffect } from "react";
 import colors from "tailwindcss/colors";
@@ -7,19 +7,20 @@ import { CompletedLocation } from "../../../types/game";
 
 interface DestinationProps {
   projection: GeoProjection;
+  geoGenerator: GeoPath<any, GeoPermissibleObjects>;
   location: Coordinates;
   target: CompletedLocation;
 }
 
 export default function Destination({
   projection,
+  geoGenerator,
   location,
   target,
 }: DestinationProps) {
   const destinationRef = useRef(null);
 
   useEffect(() => {
-    const geoGenerator = geoPath(projection);
     if (destinationRef.current) {
       select(destinationRef.current)
         .select<SVGPathElement>("#destLine")
@@ -48,7 +49,7 @@ export default function Destination({
       if (destPoint) {
         select(destinationRef.current)
           .select<SVGTextElement>("#destLabel")
-          .attr("x", destPoint[0] + 10)
+          .attr("x", destPoint[0])
           .attr("y", destPoint[1])
           .attr(
             "display",
@@ -61,7 +62,7 @@ export default function Destination({
           );
       }
     }
-  }, [destinationRef, projection]);
+  }, [destinationRef, projection, geoGenerator, location, target]);
 
   return (
     <g ref={destinationRef}>
