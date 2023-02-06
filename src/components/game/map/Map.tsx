@@ -1,7 +1,7 @@
 import { drag } from "d3-drag";
 import { geoOrthographic, GeoProjection } from "d3-geo";
-import { pointers, select } from "d3-selection";
-import { useEffect, useRef, useState } from "react";
+import { select, pointers } from "d3-selection";
+import { useState, useRef, useEffect } from "react";
 import versor from "versor";
 import useCoordinates from "../../../hooks/useCoordinates";
 import useStages from "../../../hooks/useStages";
@@ -29,28 +29,34 @@ export default function Map({ stages, coordinates }: MapProps) {
     0,
   ]);
   const mapRef = useRef<SVGSVGElement>(null);
-  const projection = geoOrthographic().rotate(rotation);
-
-  useEffect(() => {
-    projection.rotate(rotation);
-  }, [rotation, projection]);
+  const [projection, setProjection] = useState(geoOrthographic);
 
   useEffect(() => {
     if (mapRef.current) {
-      projection.fitSize(
-        [mapRef.current.clientWidth, mapRef.current.clientHeight],
-        {
+      const map = mapRef.current;
+      setProjection((p: GeoProjection) =>
+        p.fitSize([map.clientWidth, map.clientHeight], {
           type: "Sphere",
-        }
+        })
       );
 
-      select(mapRef.current).call(
+      select(map).call(
         handleDrag
-          .call(mapRef.current, projection, setRotation)
+          .call(map, projection, setRotation)
           .on("drag.render", () => {})
       );
     }
-  }, [mapRef, projection]);
+  }, [mapRef, projection, rotation]);
+
+  useEffect(() => {
+    setProjection((p: GeoProjection) => {
+      return geoOrthographic()
+        .scale(p.scale())
+        .translate(p.translate())
+        .rotate(rotation);
+    });
+    console.log(projection);
+  }, [rotation]);
 
   return (
     <div className="w-full aspect-square">

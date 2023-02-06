@@ -10,7 +10,7 @@ export default function Countries({
   projection: GeoProjection;
 }) {
   const countriesRef = useRef(null);
-  
+
   useEffect(() => {
     if (countriesRef.current) {
       const geoGenerator = geoPath(projection);
