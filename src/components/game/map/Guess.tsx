@@ -7,14 +7,12 @@ import { CompletedLocation } from "../../../types/game";
 import { getDestination } from "../../../utilities/cartography";
 
 interface GuessProps {
-  rotation: [number, number, number];
   geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
   location: Coordinates;
   target: CompletedLocation;
 }
 
 export default function Guess({
-  rotation,
   geoGeneratorRef,
   location,
   target,

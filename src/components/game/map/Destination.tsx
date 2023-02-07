@@ -6,14 +6,12 @@ import { Coordinates } from "../../../types/cartography";
 import { CompletedLocation } from "../../../types/game";
 
 interface DestinationProps {
-  rotation: [number, number, number];
   geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
   location: Coordinates;
   target: CompletedLocation;
 }
 
 export default function Destination({
-  rotation,
   geoGeneratorRef,
   location,
   target,

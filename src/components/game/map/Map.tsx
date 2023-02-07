@@ -35,7 +35,14 @@ export default function Map({ stages, coordinates }: MapProps) {
   // Put them in useRef so they don't get re-created and forget their values on re-render.
   // Since React can't monitor changes to internal values, rely on rotation state.
   const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
-  const projectionRef = useRef(geoOrthographic().rotate(rotation));
+  const projectionRef = useRef(
+    geoOrthographic()
+      // fit to [0, 0] prevents flashing at start
+      .fitSize([0, 0], {
+        type: "Sphere",
+      })
+      .rotate(rotation)
+  );
   const geoGeneratorRef = useRef(geoPath(projectionRef.current));
 
   useEffect(() => {
@@ -58,19 +65,14 @@ export default function Map({ stages, coordinates }: MapProps) {
   return (
     <div className="w-full aspect-square">
       <svg ref={mapRef} id="map" className="w-full h-full">
-        <Globe rotation={rotation} geoGeneratorRef={geoGeneratorRef}></Globe>
-        <Countries
-          rotation={rotation}
-          geoGeneratorRef={geoGeneratorRef}
-        ></Countries>
+        <Globe geoGeneratorRef={geoGeneratorRef}></Globe>
+        <Countries geoGeneratorRef={geoGeneratorRef}></Countries>
         <Destination
-          rotation={rotation}
           geoGeneratorRef={geoGeneratorRef}
           location={coordinates.value}
           target={target}
         ></Destination>
         <Guess
-          rotation={rotation}
           geoGeneratorRef={geoGeneratorRef}
           location={coordinates.value}
           target={target}

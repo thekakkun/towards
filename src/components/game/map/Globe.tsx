@@ -4,10 +4,8 @@ import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
 
 export default function Globe({
-  rotation,
   geoGeneratorRef,
 }: {
-  rotation: [number, number, number];
   geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
 }) {
   const globeRef = useRef(null);

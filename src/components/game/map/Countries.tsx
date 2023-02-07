@@ -9,10 +9,10 @@ import colors from "tailwindcss/colors";
 import geoJson from "../../../assets/data/ne_110m_admin_0_countries.json";
 
 export default function Countries({
-  rotation,
+  
   geoGeneratorRef,
 }: {
-  rotation: [number, number, number];
+  
   geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
 }) {
   const countriesRef = useRef(null);
