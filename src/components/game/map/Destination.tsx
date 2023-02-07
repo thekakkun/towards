@@ -1,19 +1,19 @@
-import { GeoProjection,  GeoPath, GeoPermissibleObjects } from "d3-geo";
+import { GeoPath, GeoPermissibleObjects } from "d3-geo";
 import { select } from "d3-selection";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
 import { Coordinates } from "../../../types/cartography";
 import { CompletedLocation } from "../../../types/game";
 
 interface DestinationProps {
-  projection: GeoProjection;
+  rotation: [number, number, number];
   geoGenerator: GeoPath<any, GeoPermissibleObjects>;
   location: Coordinates;
   target: CompletedLocation;
 }
 
 export default function Destination({
-  projection,
+  rotation,
   geoGenerator,
   location,
   target,
@@ -21,48 +21,52 @@ export default function Destination({
   const destinationRef = useRef(null);
 
   useEffect(() => {
-    if (destinationRef.current) {
-      select(destinationRef.current)
-        .select<SVGPathElement>("#destLine")
-        .attr(
-          "d",
-          geoGenerator({
-            type: "LineString",
-            coordinates: [
-              [location.longitude, location.latitude],
-              [target.longitude, target.latitude],
-            ],
-          })
-        );
+    if (!destinationRef.current) throw Error("destinationRef is not assigned");
 
+    select(destinationRef.current)
+      .select<SVGPathElement>("#destLine")
+      .attr(
+        "d",
+        geoGenerator({
+          type: "LineString",
+          coordinates: [
+            [location.longitude, location.latitude],
+            [target.longitude, target.latitude],
+          ],
+        })
+      );
+
+    select(destinationRef.current)
+      .select<SVGPathElement>("#destPoint")
+      .attr(
+        "d",
+        geoGenerator({
+          type: "Point",
+          coordinates: [target.longitude, target.latitude],
+        })
+      );
+
+    const projection = geoGenerator.projection();
+    const destPoint =
+      typeof projection === "function"
+        ? projection([target.longitude, target.latitude])
+        : null;
+    if (destPoint) {
       select(destinationRef.current)
-        .select<SVGPathElement>("#destPoint")
+        .select<SVGTextElement>("#destLabel")
+        .attr("x", destPoint[0] + 10)
+        .attr("y", destPoint[1])
         .attr(
-          "d",
+          "display",
           geoGenerator({
             type: "Point",
             coordinates: [target.longitude, target.latitude],
-          })
+          }) === null
+            ? "none"
+            : ""
         );
-
-      const destPoint = projection([target.longitude, target.latitude]);
-      if (destPoint) {
-        select(destinationRef.current)
-          .select<SVGTextElement>("#destLabel")
-          .attr("x", destPoint[0])
-          .attr("y", destPoint[1])
-          .attr(
-            "display",
-            geoGenerator({
-              type: "Point",
-              coordinates: [target.longitude, target.latitude],
-            }) === null
-              ? "none"
-              : ""
-          );
-      }
     }
-  }, [destinationRef, projection, geoGenerator, location, target]);
+  }, [destinationRef, rotation, geoGenerator, location, target]);
 
   return (
     <g ref={destinationRef}>

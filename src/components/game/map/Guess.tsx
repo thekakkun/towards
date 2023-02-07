@@ -7,25 +7,31 @@ import { CompletedLocation } from "../../../types/game";
 import { getDestination } from "../../../utilities/cartography";
 
 interface GuessProps {
+  rotation: [number, number, number];
   geoGenerator: GeoPath<any, GeoPermissibleObjects>;
   location: Coordinates;
   target: CompletedLocation;
 }
 
-export default function Guess({ geoGenerator, location, target }: GuessProps) {
+export default function Guess({
+  rotation,
+  geoGenerator,
+  location,
+  target,
+}: GuessProps) {
   const guessRef = useRef(null);
 
   useEffect(() => {
-    if (guessRef.current) {
-      select(guessRef.current).attr(
-        "d",
-        geoGenerator({
-          type: "Polygon",
-          coordinates: [getArrowCoords(location, target)],
-        })
-      );
-    }
-  }, [geoGenerator, location, target]);
+    if (!guessRef.current) throw Error("guessRef is not assigned");
+
+    select(guessRef.current).attr(
+      "d",
+      geoGenerator({
+        type: "Polygon",
+        coordinates: [getArrowCoords(location, target)],
+      })
+    );
+  }, [rotation, geoGenerator, location, target]);
 
   return (
     <g>
