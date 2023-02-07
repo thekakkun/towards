@@ -11,14 +11,14 @@ export default function Globe({
   const globeRef = useRef(null);
 
   useEffect(() => {
-    if (globeRef.current) {
-      select(globeRef.current).attr(
-        "d",
-        geoGenerator({
-          type: "Sphere",
-        })
-      );
-    }
+    if (!globeRef.current) throw Error("globeRef is not assigned");
+
+    select(globeRef.current).attr(
+      "d",
+      geoGenerator({
+        type: "Sphere",
+      })
+    );
   }, [globeRef, geoGenerator]);
 
   return <path ref={globeRef} fill={colors.blue[100]}></path>;
