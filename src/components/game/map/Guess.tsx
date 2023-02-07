@@ -8,14 +8,14 @@ import { getDestination } from "../../../utilities/cartography";
 
 interface GuessProps {
   rotation: [number, number, number];
-  geoGenerator: GeoPath<any, GeoPermissibleObjects>;
+  geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
   location: Coordinates;
   target: CompletedLocation;
 }
 
 export default function Guess({
   rotation,
-  geoGenerator,
+  geoGeneratorRef,
   location,
   target,
 }: GuessProps) {
@@ -26,12 +26,12 @@ export default function Guess({
 
     select(guessRef.current).attr(
       "d",
-      geoGenerator({
+      geoGeneratorRef.current({
         type: "Polygon",
         coordinates: [getArrowCoords(location, target)],
       })
     );
-  }, [rotation, geoGenerator, location, target]);
+  });
 
   return (
     <g>

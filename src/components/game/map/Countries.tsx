@@ -10,10 +10,10 @@ import geoJson from "../../../assets/data/ne_110m_admin_0_countries.json";
 
 export default function Countries({
   rotation,
-  geoGenerator,
+  geoGeneratorRef,
 }: {
   rotation: [number, number, number];
-  geoGenerator: GeoPath<any, GeoPermissibleObjects>;
+  geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
 }) {
   const countriesRef = useRef(null);
 
@@ -23,8 +23,8 @@ export default function Countries({
     const u = select(countriesRef.current)
       .selectAll<SVGPathElement, ExtendedFeatureCollection>("path")
       .data((geoJson as ExtendedFeatureCollection).features);
-    u.enter().append("path").merge(u).attr("d", geoGenerator);
-  }, [countriesRef, geoGenerator, rotation]);
+    u.enter().append("path").merge(u).attr("d", geoGeneratorRef.current);
+  });
 
   return (
     <g

@@ -7,14 +7,14 @@ import { CompletedLocation } from "../../../types/game";
 
 interface DestinationProps {
   rotation: [number, number, number];
-  geoGenerator: GeoPath<any, GeoPermissibleObjects>;
+  geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
   location: Coordinates;
   target: CompletedLocation;
 }
 
 export default function Destination({
   rotation,
-  geoGenerator,
+  geoGeneratorRef,
   location,
   target,
 }: DestinationProps) {
@@ -27,7 +27,7 @@ export default function Destination({
       .select<SVGPathElement>("#destLine")
       .attr(
         "d",
-        geoGenerator({
+        geoGeneratorRef.current({
           type: "LineString",
           coordinates: [
             [location.longitude, location.latitude],
@@ -40,13 +40,13 @@ export default function Destination({
       .select<SVGPathElement>("#destPoint")
       .attr(
         "d",
-        geoGenerator({
+        geoGeneratorRef.current({
           type: "Point",
           coordinates: [target.longitude, target.latitude],
         })
       );
 
-    const projection = geoGenerator.projection();
+    const projection = geoGeneratorRef.current.projection();
     const destPoint =
       typeof projection === "function"
         ? projection([target.longitude, target.latitude])
@@ -58,7 +58,7 @@ export default function Destination({
         .attr("y", destPoint[1])
         .attr(
           "display",
-          geoGenerator({
+          geoGeneratorRef.current({
             type: "Point",
             coordinates: [target.longitude, target.latitude],
           }) === null
@@ -66,7 +66,7 @@ export default function Destination({
             : ""
         );
     }
-  }, [destinationRef, rotation, geoGenerator, location, target]);
+  });
 
   return (
     <g ref={destinationRef}>

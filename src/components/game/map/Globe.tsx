@@ -4,9 +4,11 @@ import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
 
 export default function Globe({
-  geoGenerator,
+  rotation,
+  geoGeneratorRef,
 }: {
-  geoGenerator: GeoPath<any, GeoPermissibleObjects>;
+  rotation: [number, number, number];
+  geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
 }) {
   const globeRef = useRef(null);
 
@@ -15,11 +17,11 @@ export default function Globe({
 
     select(globeRef.current).attr(
       "d",
-      geoGenerator({
+      geoGeneratorRef.current({
         type: "Sphere",
       })
     );
-  }, [globeRef, geoGenerator]);
+  });
 
   return <path ref={globeRef} fill={colors.blue[100]}></path>;
 }

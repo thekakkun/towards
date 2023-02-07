@@ -26,49 +26,52 @@ export default function Map({ stages, coordinates }: MapProps) {
     throw new Error("User coordinates unavailable");
   }
 
-  const [rotation, setRotation] = useState<[number, number, number]>([
+  const initRotation = useRef<[number, number, number]>([
     -coordinates.value.longitude,
     -coordinates.value.latitude,
     0,
   ]);
   // D3 GeoProjection and GeoGenerator objects are mutable.
   // Put them in useRef so they don't get re-created and forget their values on re-render.
-  // Since React can't monitor changes to internal values, rely on rotation state above.
+  // Since React can't monitor changes to internal values, rely on rotation state.
+  const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
   const projectionRef = useRef(geoOrthographic().rotate(rotation));
   const geoGeneratorRef = useRef(geoPath(projectionRef.current));
 
   useEffect(() => {
     if (!mapRef.current) throw Error("mapRef is not assigned");
 
-    projectionRef.current.fitSize(
-      [mapRef.current.clientWidth, mapRef.current.clientHeight],
-      { type: "Sphere" }
-    );
+    setRotation(initRotation.current);
+    projectionRef.current
+      .fitSize([mapRef.current.clientWidth, mapRef.current.clientHeight], {
+        type: "Sphere",
+      })
+      .rotate(initRotation.current);
 
     select(mapRef.current).call(
       handleDrag
         .call(mapRef.current, setRotation, projectionRef.current)
         .on("drag.render", () => {})
     );
-  }, [mapRef]);
+  }, []);
 
   return (
     <div className="w-full aspect-square">
       <svg ref={mapRef} id="map" className="w-full h-full">
-        <Globe geoGenerator={geoGeneratorRef.current}></Globe>
+        <Globe rotation={rotation} geoGeneratorRef={geoGeneratorRef}></Globe>
         <Countries
           rotation={rotation}
-          geoGenerator={geoGeneratorRef.current}
+          geoGeneratorRef={geoGeneratorRef}
         ></Countries>
         <Destination
           rotation={rotation}
-          geoGenerator={geoGeneratorRef.current}
+          geoGeneratorRef={geoGeneratorRef}
           location={coordinates.value}
           target={target}
         ></Destination>
         <Guess
           rotation={rotation}
-          geoGenerator={geoGeneratorRef.current}
+          geoGeneratorRef={geoGeneratorRef}
           location={coordinates.value}
           target={target}
         ></Guess>
