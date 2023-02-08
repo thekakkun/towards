@@ -20,11 +20,5 @@ The game requires permission to access your geolocation and compass heading to p
 - [Create React App](https://create-react-app.dev/): Front end framework
 - [Tailwind](https://tailwindcss.com/): Styling
 - [D3](https://d3js.org/): Map visualizations
+- [Versor](https://github.com/d3/versor): Globe rotations
 - [WikiData](https://www.wikidata.org/wiki/Wikidata:Main_Page): City information
-
-## Todo
-
-- [x] Get coordinates and heading working on Safari
-- [x] Clean up visual style
-- [x] Create better list of potential targets (use Wikidata)
-- [x] Add criteria for target (not too close)

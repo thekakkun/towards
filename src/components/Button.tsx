@@ -1,11 +1,10 @@
-import useCoordinates from "../hooks/useCoordinates";
 import useGame from "../hooks/useGame";
-import useHeading from "../hooks/useHeading";
+import { Coordinates, Degrees, SensorHook } from "../types/over-yonder";
 
 interface ButtonProps {
   game: ReturnType<typeof useGame>;
-  coordinates: ReturnType<typeof useCoordinates>;
-  heading: ReturnType<typeof useHeading>;
+  coordinates: SensorHook<Coordinates>;
+  heading: SensorHook<Degrees>;
 }
 
 export default function Button({ game, coordinates, heading }: ButtonProps) {

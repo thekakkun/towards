@@ -1,11 +1,11 @@
 import { useState } from "react";
-import useCoordinates from "../../hooks/useCoordinates";
 
 import useStages from "../../hooks/useStages";
+import { Coordinates, SensorHook } from "../../types/over-yonder";
 
 interface GuessInfoProps {
   stages: ReturnType<typeof useStages>;
-  coordinates: ReturnType<typeof useCoordinates>;
+  coordinates: SensorHook<Coordinates>;
 }
 
 export default function GuessInfo({ stages, coordinates }: GuessInfoProps) {

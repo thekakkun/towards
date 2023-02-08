@@ -1,8 +1,10 @@
-import useCoordinates from "../../hooks/useCoordinates";
+import { Coordinates, SensorHook } from "../../types/over-yonder";
 
-export default function CoordinatesInfo(
-  coordinates: ReturnType<typeof useCoordinates>
-) {
+export default function CoordinatesInfo({
+  coordinates,
+}: {
+  coordinates: SensorHook<Coordinates>;
+}) {
   return (
     <li
       className={`rounded border-2 mt-2 p-2 ${

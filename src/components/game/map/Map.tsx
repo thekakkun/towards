@@ -1,11 +1,11 @@
 import { drag } from "d3-drag";
 import { geoOrthographic, geoPath, GeoProjection } from "d3-geo";
-import { select, pointers } from "d3-selection";
-import { useState, useRef, useEffect, useLayoutEffect } from "react";
+import { pointers, select } from "d3-selection";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import versor from "versor";
-import useCoordinates from "../../../hooks/useCoordinates";
-import useStages from "../../../hooks/useStages";
 
+import useStages from "../../../hooks/useStages";
+import { Coordinates, SensorHook } from "../../../types/over-yonder";
 import Countries from "./Countries";
 import Destination from "./Destination";
 import Globe from "./Globe";
@@ -13,7 +13,7 @@ import Guess from "./Guess";
 
 interface MapProps {
   stages: ReturnType<typeof useStages>;
-  coordinates: ReturnType<typeof useCoordinates>;
+  coordinates: SensorHook<Coordinates>;
 }
 
 export default function Map({ stages, coordinates }: MapProps) {
@@ -45,7 +45,7 @@ export default function Map({ stages, coordinates }: MapProps) {
       { type: "Sphere" }
     );
   }, []);
-  
+
   useEffect(() => {
     if (!mapRef.current) throw Error("mapRef is not assigned");
 

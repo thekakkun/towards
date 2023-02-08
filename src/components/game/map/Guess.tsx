@@ -1,9 +1,9 @@
 import { GeoPath, GeoPermissibleObjects } from "d3-geo";
 import { select } from "d3-selection";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
-import { Coordinates } from "../../../types/cartography";
-import { CompletedLocation } from "../../../types/game";
+
+import { CompletedLocation, Coordinates } from "../../../types/over-yonder";
 import { getDestination } from "../../../utilities/cartography";
 
 interface GuessProps {

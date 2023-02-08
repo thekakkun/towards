@@ -2,8 +2,8 @@ import { GeoPath, GeoPermissibleObjects } from "d3-geo";
 import { select } from "d3-selection";
 import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
-import { Coordinates } from "../../../types/cartography";
-import { CompletedLocation } from "../../../types/game";
+
+import { Coordinates, CompletedLocation } from "../../../types/over-yonder";
 
 interface DestinationProps {
   geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;

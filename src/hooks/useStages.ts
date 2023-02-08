@@ -1,19 +1,29 @@
 import { useState } from "react";
 
+import cities from "../assets/data/cities.json";
 import {
   CompletedLocation,
-  CurrentLocation,
+  Coordinates,
   Guess,
+  SensorHook,
   StageList,
-} from "../types/game";
-import { getRandomCity } from "../utilities/game";
-import useCoordinates from "./useCoordinates";
+  TargetLocation,
+} from "../types/over-yonder";
+import { getDistance } from "../utilities/cartography";
 
-export default function useStages(length = 5) {
+export default function useStages(length = 5): {
+  list: StageList;
+  current: () => TargetLocation | CompletedLocation;
+  setNext: (coordinates: SensorHook<Coordinates>) => void;
+  reroll: (coordinates: SensorHook<Coordinates>) => void;
+  makeGuess: (guess: Guess) => void;
+  onFinal: () => boolean;
+  reset: () => void;
+} {
   const initialStages: StageList = new Array(length).fill(null);
   const [stages, setStages] = useState<StageList>(initialStages);
 
-  function current(): CurrentLocation | CompletedLocation {
+  function current(): TargetLocation | CompletedLocation {
     let lastStage = stages.reduce(
       (accumulator, currentValue) =>
         (accumulator = currentValue !== null ? currentValue : accumulator)
@@ -31,15 +41,13 @@ export default function useStages(length = 5) {
    * @param coordinates The user's location.
    * @returns The new stage.
    */
-  function setNext(
-    coordinates: ReturnType<typeof useCoordinates>
-  ): CurrentLocation {
+  function setNext(coordinates: SensorHook<Coordinates>): void {
     const nextStage = getRandomCity(stages, coordinates);
 
     for (const [i, stage] of stages.entries()) {
       if (stage == null) {
         setStages([...stages.slice(0, i), nextStage, ...stages.slice(i + 1)]);
-        return nextStage;
+        return;
       }
     }
 
@@ -51,7 +59,7 @@ export default function useStages(length = 5) {
    * @param coordinates The user's location
    * @returns
    */
-  function reroll(coordinates: ReturnType<typeof useCoordinates>) {
+  function reroll(coordinates: SensorHook<Coordinates>) {
     const newStage = getRandomCity(stages, coordinates);
 
     for (const [i, stage] of stages.entries()) {
@@ -104,4 +112,54 @@ export default function useStages(length = 5) {
     onFinal,
     reset,
   };
+}
+
+/**
+ * Select a random city from the list in /assets.
+ * Filters out previously played cities and
+ * cities that are too close (too easy).
+ * @param stages Current list of stages.
+ * @param coordinates Coordinate of user location.
+ * @returns A random city, from the city list in.
+ */
+function getRandomCity(
+  stages: StageList,
+  coordinates: SensorHook<Coordinates>
+) {
+  let candidate: TargetLocation;
+
+  /**
+   * Checks to see that candidate city isn't too close to user location.
+   * Wouldn't want to have to guess the location of your own city.
+   * @returns Whether city is too close
+   */
+  function cityTooClose(): boolean {
+    const limit = 100;
+    if (coordinates.value === null) {
+      return true;
+    }
+    return getDistance(candidate, coordinates.value) < limit;
+  }
+
+  /**
+   * Checks that user hasn't already played a stage with the candidate city.
+   * @returns Whether city has already been guessed by user.
+   */
+  function candidateInStages(): boolean {
+    return Boolean(
+      stages.filter((stage) => {
+        return (
+          stage !== null &&
+          stage.country === candidate.country &&
+          stage.city === candidate.city
+        );
+      }).length
+    );
+  }
+
+  do {
+    candidate = cities[Math.floor(Math.random() * cities.length)];
+  } while (candidateInStages() || cityTooClose());
+
+  return candidate;
 }

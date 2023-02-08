@@ -6,13 +6,12 @@ import {
 import { select } from "d3-selection";
 import { useEffect, useRef } from "react";
 import colors from "tailwindcss/colors";
+
 import geoJson from "../../../assets/data/ne_110m_admin_0_countries.json";
 
 export default function Countries({
-  
   geoGeneratorRef,
 }: {
-  
   geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
 }) {
   const countriesRef = useRef(null);

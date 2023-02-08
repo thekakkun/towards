@@ -1,6 +1,10 @@
 import useStages from "../../hooks/useStages";
 
-export default function Progress(stages: ReturnType<typeof useStages>) {
+export default function Progress({
+  stages,
+}: {
+  stages: ReturnType<typeof useStages>;
+}) {
   if (stages.list === null) {
     throw new Error("Stages not initialized.");
   }

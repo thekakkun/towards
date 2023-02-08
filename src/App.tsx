@@ -23,7 +23,7 @@ function App() {
         {game.state === "intro" ? (
           <Intro {...{ coordinates, heading }}></Intro>
         ) : game.state === "outro" ? (
-          <Outro {...stages}></Outro>
+          <Outro {...{ stages }}></Outro>
         ) : (
           <Game {...{ game, coordinates, heading, stages }}></Game>
         )}

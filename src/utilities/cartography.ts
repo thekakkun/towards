@@ -1,4 +1,4 @@
-import { Coordinates, Degrees, Radians } from "../types/cartography";
+import { Degrees, Radians, Coordinates } from "../types/over-yonder";
 
 /** The earth's radius in kms */
 const R = 6371;
@@ -8,7 +8,7 @@ const R = 6371;
  * @param degrees Angle in degrees.
  * @returns Angle in radians.
  */
-export function degToRad(degrees: Degrees): Radians {
+function degToRad(degrees: Degrees): Radians {
   return degrees * (Math.PI / 180);
 }
 
@@ -17,7 +17,7 @@ export function degToRad(degrees: Degrees): Radians {
  * @param rad Angle in radians.
  * @returns Angle in degrees.
  */
-export function radToDeg(rad: Radians): Degrees {
+function radToDeg(rad: Radians): Degrees {
   return rad / (Math.PI / 180);
 }
 
@@ -26,7 +26,7 @@ export function radToDeg(rad: Radians): Degrees {
  * @param bearing Compass bearing in degrees
  * @returns Normalized bearing
  */
-export function normalizeBearing(bearing: Degrees): Degrees {
+function normalizeBearing(bearing: Degrees): Degrees {
   return (bearing + 360) % 360;
 }
 
@@ -35,7 +35,7 @@ export function normalizeBearing(bearing: Degrees): Degrees {
  * @param longitude Longitude in degrees
  * @returns Normalized longitude
  */
-export function normalizeLongitude(
+function normalizeLongitude(
   longitude: Coordinates["longitude"]
 ): Coordinates["longitude"] {
   return ((longitude + 540) % 360) - 180;

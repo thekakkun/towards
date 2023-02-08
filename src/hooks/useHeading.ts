@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Degrees } from "../types/cartography";
-import { SensorState } from "../types/game";
+import { Degrees, SensorHook, SensorState } from "../types/over-yonder";
 
 /**
  * On being called, checks for orientation service availability
@@ -8,11 +7,7 @@ import { SensorState } from "../types/game";
  * @returns Permission state, a method to request permission and start listening,
  * and the coordinate value.
  */
-export default function useHeading(): {
-  state: SensorState;
-  requestAccess: () => Promise<void>;
-  value: number | null;
-} {
+export default function useHeading(): SensorHook<Degrees> {
   const [sensorState, setSensorState] = useState<SensorState>("unknown");
   const [heading, setHeading] = useState<Degrees | null>(null);
 

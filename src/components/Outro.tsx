@@ -1,7 +1,11 @@
 import useStages from "../hooks/useStages";
-import { CompletedLocation } from "../types/game";
+import { CompletedLocation } from "../types/over-yonder";
 
-export default function Outro(stages: ReturnType<typeof useStages>) {
+export default function Outro({
+  stages,
+}: {
+  stages: ReturnType<typeof useStages>;
+}) {
   if (stages.list === null) {
     throw new Error("Stages not initialized.");
   }

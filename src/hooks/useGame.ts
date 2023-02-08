@@ -1,16 +1,23 @@
 import { useState } from "react";
-import { GameState } from "../types/game";
 
-import { getScore } from "../utilities/game";
-import useCoordinates from "./useCoordinates";
-import useHeading from "./useHeading";
+import {
+  Coordinates,
+  Degrees,
+  GameState,
+  SensorHook,
+  TargetLocation,
+} from "../types/over-yonder";
+import { getBearing } from "../utilities/cartography";
 import useStages from "./useStages";
 
 export default function useGame(
   stages: ReturnType<typeof useStages>,
-  coordinates: ReturnType<typeof useCoordinates>,
-  heading: ReturnType<typeof useHeading>
-) {
+  coordinates: SensorHook<Coordinates>,
+  heading: SensorHook<Degrees>
+): {
+  state: GameState;
+  advance: () => void;
+} {
   const [gameState, setGameState] = useState<GameState>("intro");
 
   /**
@@ -62,4 +69,34 @@ export default function useGame(
     state: gameState,
     advance,
   };
+}
+
+/**
+ * Calculate user's score.
+ * @param target Coordinate of target city.
+ * @param coordinates Coordinate of user location.1
+ * @param heading User's direction.
+ * @returns User's score for that stage.
+ */
+function getScore(
+  target: TargetLocation,
+  coordinates: SensorHook<Coordinates>,
+  heading: SensorHook<Degrees>
+) {
+  const maxScore = 200;
+
+  if (heading.value === null) {
+    throw Error("Heading not available");
+  }
+  if (coordinates.value === null) {
+    throw Error("User position not available.");
+  }
+
+  const bearing = getBearing(coordinates.value, target);
+  const degreeDelta = Math.min(
+    Math.abs(bearing - heading.value),
+    360 - Math.abs(bearing - heading.value)
+  );
+
+  return Math.round(maxScore * (1 - degreeDelta / 180) ** 2);
 }

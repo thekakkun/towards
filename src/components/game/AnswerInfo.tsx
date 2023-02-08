@@ -1,6 +1,10 @@
 import useStages from "../../hooks/useStages";
 
-export default function AnswerInfo(stages: ReturnType<typeof useStages>) {
+export default function AnswerInfo({
+  stages,
+}: {
+  stages: ReturnType<typeof useStages>;
+}) {
   const target = stages.current();
 
   if (!("score" in target)) {

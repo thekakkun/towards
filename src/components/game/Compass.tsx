@@ -1,10 +1,8 @@
-import { ReactComponent as Rose } from "../../assets/images/rose.svg";
 import { ReactComponent as Needle } from "../../assets/images/needle.svg";
-import useHeading from "../../hooks/useHeading";
+import { ReactComponent as Rose } from "../../assets/images/rose.svg";
+import { Degrees, SensorHook } from "../../types/over-yonder";
 
-export default function Compass({
-  value: heading,
-}: ReturnType<typeof useHeading>) {
+export default function Compass({ heading }: { heading: SensorHook<Degrees> }) {
   return (
     <div className="overflow-clip relative w-full mx-auto aspect-square">
       <Rose
@@ -12,7 +10,7 @@ export default function Compass({
         className="rounded-full w-full absolute"
         style={{
           transformStyle: "preserve-3d",
-          transform: `rotateX(45deg) rotate(-${heading}deg)`,
+          transform: `rotateX(45deg) rotate(-${heading.value}deg)`,
         }}
       ></Rose>
       <Needle

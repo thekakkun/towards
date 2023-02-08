@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Coordinates } from "../types/cartography";
-import { SensorState } from "../types/game";
+import { Coordinates, SensorHook, SensorState } from "../types/over-yonder";
 
 /**
  * On being called, checks for geolocation service availability
@@ -8,11 +7,7 @@ import { SensorState } from "../types/game";
  * @returns Permission state, a method to request permission and start listening,
  * and the coordinate value.
  */
-export default function useCoordinates(): {
-  state: SensorState;
-  requestAccess: () => void;
-  value: Coordinates | null;
-} {
+export default function useCoordinates(): SensorHook<Coordinates> {
   const [sensorState, setSensorState] = useState<SensorState>("unknown");
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
 

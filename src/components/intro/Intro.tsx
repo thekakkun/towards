@@ -1,11 +1,10 @@
-import useCoordinates from "../../hooks/useCoordinates";
-import useHeading from "../../hooks/useHeading";
+import { Coordinates, Degrees, SensorHook } from "../../types/over-yonder";
 import CoordinatesInfo from "./CoordinatesInfo";
 import HeadingInfo from "./HeadingInfo";
 
 interface IntroProps {
-  coordinates: ReturnType<typeof useCoordinates>;
-  heading: ReturnType<typeof useHeading>;
+  coordinates: SensorHook<Coordinates>;
+  heading: SensorHook<Degrees>;
 }
 
 export default function Intro({ coordinates, heading }: IntroProps) {
@@ -33,8 +32,8 @@ export default function Intro({ coordinates, heading }: IntroProps) {
       </p>
 
       <ul className="list-inside mt-2">
-        <CoordinatesInfo {...coordinates}></CoordinatesInfo>
-        <HeadingInfo {...heading}></HeadingInfo>
+        <CoordinatesInfo {...{ coordinates }}></CoordinatesInfo>
+        <HeadingInfo {...{ heading }}></HeadingInfo>
       </ul>
 
       <h3 className="text-base font-bold text-stone-700 mt-2">

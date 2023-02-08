@@ -1,8 +1,6 @@
-import useCoordinates from "../../hooks/useCoordinates";
 import useGame from "../../hooks/useGame";
-import useHeading from "../../hooks/useHeading";
 import useStages from "../../hooks/useStages";
-
+import { Coordinates, Degrees, SensorHook } from "../../types/over-yonder";
 import AnswerInfo from "./AnswerInfo";
 import Compass from "./Compass";
 import GuessInfo from "./GuessInfo";
@@ -11,8 +9,8 @@ import Progress from "./Progress";
 
 interface GameProps {
   game: ReturnType<typeof useGame>;
-  coordinates: ReturnType<typeof useCoordinates>;
-  heading: ReturnType<typeof useHeading>;
+  coordinates: SensorHook<Coordinates>;
+  heading: SensorHook<Degrees>;
   stages: ReturnType<typeof useStages>;
 }
 
@@ -30,15 +28,15 @@ export default function Game({
 
   return (
     <div className="h-full flex flex-col gap-3">
-      <Progress {...stages}></Progress>
+      <Progress {...{ stages }}></Progress>
       {game.state === "guess" ? (
         <>
           <GuessInfo {...{ stages, coordinates }}></GuessInfo>
-          <Compass {...heading}></Compass>
+          <Compass {...{ heading }}></Compass>
         </>
       ) : (
         <>
-          <AnswerInfo {...stages}></AnswerInfo>
+          <AnswerInfo {...{ stages }}></AnswerInfo>
           <Map {...{ stages, coordinates }}></Map>
         </>
       )}
