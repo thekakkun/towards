@@ -1,7 +1,7 @@
 import { drag } from "d3-drag";
 import { geoOrthographic, geoPath, GeoProjection } from "d3-geo";
 import { select, pointers } from "d3-selection";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import versor from "versor";
 import useCoordinates from "../../../hooks/useCoordinates";
 import useStages from "../../../hooks/useStages";
@@ -26,57 +26,45 @@ export default function Map({ stages, coordinates }: MapProps) {
     throw new Error("User coordinates unavailable");
   }
 
-  const initRotation = useRef<[number, number, number]>([
+  // D3 GeoProjection and GeoGenerator objects are mutable.
+  // Put them in useRef so they don't get re-created and forget their values on re-render.
+  // Since React can't monitor changes to internal values, rely on rotation state.
+  const [rotation, setRotation] = useState<[number, number, number]>([
     -coordinates.value.longitude,
     -coordinates.value.latitude,
     0,
   ]);
-  // D3 GeoProjection and GeoGenerator objects are mutable.
-  // Put them in useRef so they don't get re-created and forget their values on re-render.
-  // Since React can't monitor changes to internal values, rely on rotation state.
-  const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
-  const projectionRef = useRef(
-    geoOrthographic()
-      // fit to [0, 0] prevents flashing at start
-      .fitSize([0, 0], {
-        type: "Sphere",
-      })
-      .rotate(rotation)
-  );
+  const projectionRef = useRef(geoOrthographic().rotate(rotation));
   const geoGeneratorRef = useRef(geoPath(projectionRef.current));
 
+  useLayoutEffect(() => {
+    if (!mapRef.current) throw Error("mapRef is not assigned");
+
+    projectionRef.current.fitSize(
+      [mapRef.current.clientWidth, mapRef.current.clientHeight],
+      { type: "Sphere" }
+    );
+  }, []);
+  
   useEffect(() => {
     if (!mapRef.current) throw Error("mapRef is not assigned");
 
-    setRotation(initRotation.current);
-    projectionRef.current
-      .fitSize([mapRef.current.clientWidth, mapRef.current.clientHeight], {
-        type: "Sphere",
-      })
-      .rotate(initRotation.current);
-
     select(mapRef.current).call(
-      handleDrag
-        .call(mapRef.current, setRotation, projectionRef.current)
-        .on("drag.render", () => {})
+      handleDrag.call(mapRef.current, setRotation, projectionRef.current)
     );
   }, []);
 
   return (
     <div className="w-full aspect-square">
       <svg ref={mapRef} id="map" className="w-full h-full">
-        <Globe geoGeneratorRef={geoGeneratorRef}></Globe>
-        <Countries geoGeneratorRef={geoGeneratorRef}></Countries>
-        <Destination
-          geoGeneratorRef={geoGeneratorRef}
-          location={coordinates.value}
-          target={target}
-        ></Destination>
+        <Globe {...{ geoGeneratorRef }}></Globe>
+        <Countries {...{ geoGeneratorRef }}></Countries>
         <Guess
-          geoGeneratorRef={geoGeneratorRef}
-          location={coordinates.value}
-          target={target}
+          {...{ geoGeneratorRef, location: coordinates.value, target }}
         ></Guess>
+        <Destination
+          {...{ geoGeneratorRef, location: coordinates.value, target }}
+        ></Destination>
       </svg>
     </div>
   );

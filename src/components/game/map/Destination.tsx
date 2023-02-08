@@ -53,7 +53,7 @@ export default function Destination({
       select(destinationRef.current)
         .select<SVGTextElement>("#destLabel")
         .attr("x", destPoint[0] + 10)
-        .attr("y", destPoint[1])
+        .attr("y", destPoint[1] - 10)
         .attr(
           "display",
           geoGeneratorRef.current({

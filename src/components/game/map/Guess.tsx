@@ -54,7 +54,7 @@ function getArrowCoords(location: Coordinates, target: CompletedLocation) {
     [27.1, -99.37],
   ].map(([dist, angle]) => [dist, angle + 90]); // rotate so tip is at 0 degrees
 
-  const arrowLength = 2500;
+  const arrowLength = 2000;
   const scale = arrowLength / (coords[0][0] + coords[3][0]);
   let arrowPolygon = coords.map(([dist, angle]) =>
     getDestination(location, target.heading + angle, dist * scale)
