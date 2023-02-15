@@ -10,7 +10,8 @@ export default function CoordinatesInfo({
       className={`rounded border-2 mt-2 p-2 ${
         coordinates.state === "ready"
           ? "bg-emerald-100 border-emerald-400"
-          : coordinates.state === "unavailable"
+          : coordinates.state === "unavailable" ||
+            coordinates.state === "denied"
           ? "bg-red-100 border-red-400"
           : "bg-yellow-100 border-yellow-400"
       }`}
