@@ -19,6 +19,7 @@ The game requires permission to access your geolocation and compass heading to p
 
 - [Create React App](https://create-react-app.dev/): Front end framework
 - [Tailwind](https://tailwindcss.com/): Styling
-- [D3](https://d3js.org/): Map visualizations
-- [Versor](https://github.com/d3/versor): Globe rotations
+- [D3](https://d3js.org/): Globe visualization
+- [TopoJSON](https://github.com/topojson/topojson): Globe data
+- [Versor](https://github.com/d3/versor): Globe rotation
 - [WikiData](https://www.wikidata.org/wiki/Wikidata:Main_Page): City information
