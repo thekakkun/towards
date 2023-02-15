@@ -9,6 +9,7 @@ import { Coordinates, SensorHook } from "../../../types/over-yonder";
 import Countries from "./Countries";
 import Destination from "./Destination";
 import Globe from "./Globe";
+import Graticule from "./Graticule";
 import Guess from "./Guess";
 
 interface MapProps {
@@ -59,6 +60,7 @@ export default function Map({ stages, coordinates }: MapProps) {
       <svg ref={mapRef} id="map" className="w-full h-full">
         <Globe {...{ geoGeneratorRef }}></Globe>
         <Countries {...{ geoGeneratorRef }}></Countries>
+        <Graticule {...{ geoGeneratorRef }}></Graticule>
         <Guess
           {...{ geoGeneratorRef, location: coordinates.value, target }}
         ></Guess>
