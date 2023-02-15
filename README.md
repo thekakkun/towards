@@ -1,10 +1,27 @@
 # 🧭 Over Yonder
 
-## About
+**Over Yonder can be played [right here on GitHub](https://thekakkun.github.io/over-yonder/)!**
 
-This is a location-based geography game for smartphone. Try and guess the shortest-distance direction for each city.
+## What is it?
 
-[**Play the game here!**](https://thekakkun.github.io/over-yonder)
+Try and guess the shortest-distance direction for each city in this location-based geography game for smartphone.
+
+## Tech Stack
+
+### Front end
+
+- [Create React App](https://create-react-app.dev/): Framework
+- [Tailwind](https://tailwindcss.com/): Styling
+
+### The map
+
+- [D3](https://d3js.org/): Visualization
+- [TopoJSON](https://github.com/topojson/topojson): Country data
+- [Versor](https://github.com/d3/versor): Globe rotation handler
+
+### Target data
+
+- [WikiData](https://www.wikidata.org/wiki/Wikidata:Main_Page): City information and coordinates
 
 ## Requirements
 
@@ -14,12 +31,3 @@ The game requires permission to access your geolocation and compass heading to p
 
 - Android: Chrome
 - iOS: Safari
-
-## Tech Stack
-
-- [Create React App](https://create-react-app.dev/): Front end framework
-- [Tailwind](https://tailwindcss.com/): Styling
-- [D3](https://d3js.org/): Globe visualization
-- [TopoJSON](https://github.com/topojson/topojson): Globe data
-- [Versor](https://github.com/d3/versor): Globe rotation
-- [WikiData](https://www.wikidata.org/wiki/Wikidata:Main_Page): City information
