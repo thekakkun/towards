@@ -2,9 +2,9 @@
 
 ## About
 
-This is a location-based geography game for smartphones. Try and guess the shortest-distance direction for each city.
+This is a location-based geography game for smartphone. Try and guess the shortest-distance direction for each city.
 
-[Play the game here!](https://thekakkun.github.io/over-yonder)
+[**Play the game here!**](https://thekakkun.github.io/over-yonder)
 
 ## Requirements
 
