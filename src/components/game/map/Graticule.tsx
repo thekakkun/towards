@@ -1,6 +1,6 @@
-import { geoGraticule, GeoPath, GeoPermissibleObjects } from "d3-geo";
+import { geoGraticule10, GeoPath, GeoPermissibleObjects } from "d3-geo";
 import { select } from "d3-selection";
-import { useRef, useEffect, useCallback, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import colors from "tailwindcss/colors";
 
 export default function Graticule({
@@ -9,8 +9,7 @@ export default function Graticule({
   geoGeneratorRef: React.MutableRefObject<GeoPath<any, GeoPermissibleObjects>>;
 }) {
   const graticuleRef = useRef(null);
-  const graticuleGenerator = useMemo(geoGraticule, []);
-  const graticules = useMemo(graticuleGenerator, []);
+  const graticules = useMemo(geoGraticule10, []);
 
   useEffect(() => {
     if (!graticuleRef.current) throw Error("globeRef is not assigned");
@@ -19,6 +18,6 @@ export default function Graticule({
   });
 
   return (
-    <path ref={graticuleRef} fillOpacity={0} stroke={colors.stone[300]}></path>
+    <path ref={graticuleRef} fillOpacity={0} stroke={colors.stone[400]} strokeDasharray="1"></path>
   );
 }
