@@ -18,6 +18,11 @@ export default function Graticule({
   });
 
   return (
-    <path ref={graticuleRef} fillOpacity={0} stroke={colors.stone[400]} strokeDasharray="1"></path>
+    <path
+      ref={graticuleRef}
+      fillOpacity={0}
+      stroke={colors.stone[300]}
+      strokeWidth={0.5}
+    ></path>
   );
 }
