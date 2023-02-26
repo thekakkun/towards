@@ -24,6 +24,7 @@ export default function useCoordinates(): SensorHook<Coordinates> {
     if (!("geolocation" in navigator)) {
       setSensorState("unavailable");
     } else {
+      setSensorState("prompt");
       attachListener();
     }
 
