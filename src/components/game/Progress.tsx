@@ -19,7 +19,7 @@ export default function Progress({
               ? "bg-stone-300"
               : "score" in stage && stage !== stages.current()
               ? "bg-stone-400"
-              : "bg-emerald-600"
+              : "bg-stone-700"
           }`}
         >
           <p
