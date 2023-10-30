@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Button from "./components/Button";
+import Game from "./components/game/Game";
+import Intro from "./components/intro/Intro";
+import Outro from "./components/Outro";
+import useCoordinates from "./hooks/useCoordinates";
+import useGame from "./hooks/useGame";
+import useHeading from "./hooks/useHeading";
+import useStages from "./hooks/useStages";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const coordinates = useCoordinates();
+  const heading = useHeading();
+  const stages = useStages();
+  const game = useGame(stages, coordinates, heading);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="max-w-3xl mx-auto">
+      <header className="flex-none w-full pt-4 px-4">
+        <h1 className="text-stone-800 text-xl font-bold">🧭 Over Yonder!</h1>
+      </header>
+
+      <div className="w-full  mt-4 px-4">
+        {game.state === "intro" ? (
+          <Intro {...{ coordinates, heading }}></Intro>
+        ) : game.state === "outro" ? (
+          <Outro {...{ stages }}></Outro>
+        ) : (
+          <Game {...{ game, coordinates, heading, stages }}></Game>
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <Button {...{ game, coordinates, heading }}></Button>
+    </div>
+  );
 }
 
-export default App
+export default App;
