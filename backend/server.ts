@@ -1,8 +1,12 @@
-import server from "./app";
+import fastify from "./app";
 
-const PORT = 8080;
-const HOST = "localhost";
+const start = async () => {
+  try {
+    await fastify.listen({ port: 3000 });
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+};
 
-server.listen(PORT, HOST, () => {
-  console.log(`Server is running on http://${HOST}:${PORT}`);
-});
+start();

@@ -1,7 +1,16 @@
-import { Pool } from "pg";
+import fastifyPostgres, {
+  FastifyPostgresRouteOptions,
+} from "@fastify/postgres";
+import { FastifyInstance } from "fastify";
+import fastifyPlugin from "fastify-plugin";
 
-const pool = new Pool();
-
-export function query(text: string, params?: any[]) {
-  return pool.query(text, params);
+async function dbConnector(
+  fastify: FastifyInstance,
+  options: FastifyPostgresRouteOptions
+) {
+  fastify.register(fastifyPostgres, {
+    connectionString: "postgres://hiroto@localhost:5432/overyonder_dev",
+  });
 }
+
+export default fastifyPlugin(dbConnector);

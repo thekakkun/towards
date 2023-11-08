@@ -1,10 +1,10 @@
-import http, { IncomingMessage, ServerResponse } from "http";
+import Fastify from "fastify";
+import locationRouter from "./src/routes/locationRoutes";
+import dbConnector from "./src/config/database";
 
-const requestListener = function (req: IncomingMessage, res: ServerResponse) {
-  res.writeHead(200);
-  res.end("My first server!");
-};
+const fastify = Fastify({ logger: true });
 
-const server = http.createServer(requestListener);
+fastify.register(dbConnector)
+fastify.register(locationRouter);
 
-export default server;
+export default fastify;

@@ -1,5 +1,10 @@
-import { IncomingMessage, ServerResponse } from "http";
+import { FastifyReply, FastifyRequest } from "fastify";
+import fastify from "../../app";
 
-export const getAllLocations = (req: IncomingMessage, res: ServerResponse) => {
-  res.writeHead(200);
+export const getAllLocations = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  const result = await fastify.pg.query("SELECT * FROM location;");
+  reply.send(result);
 };
