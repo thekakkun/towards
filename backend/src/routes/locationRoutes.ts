@@ -1,16 +1,27 @@
 import { FastifyInstance, RouteOptions } from "fastify";
 import { LocationModel } from "../model/locationModel";
 
+interface IQuerystring {
+  limit?: number;
+}
+
 interface IParams {
   location: LocationModel["id"];
 }
 
 async function locationRouter(fastify: FastifyInstance, options: RouteOptions) {
-  fastify.get("/locations", async (request, reply) => {
-    const loc = request.query;
+  fastify.get<{ Querystring: IQuerystring }>("/locations", (request, reply) => {
+    let text = "SELECT * FROM location ORDER BY random()";
 
-    const { rows } = await fastify.pg.query("SELECT * FROM location;");
-    return rows;
+    if (request.query.limit) {
+      text += ` limit ${request.query.limit};`;
+    } else {
+      text += ";";
+    }
+
+    fastify.pg.query(text, (err, result) => {
+      reply.send(err || result.rows);
+    });
   });
 
   fastify.get<{ Params: IParams }>(
