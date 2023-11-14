@@ -2,7 +2,9 @@ import { FastifyInstance, RouteOptions } from "fastify";
 import { LocationModel } from "../model/locationModel";
 
 interface IQuerystring {
-  limit?: number;
+  limit?: string;
+  location?: string;
+  exclude?: string | string[];
 }
 
 interface IParams {
@@ -11,15 +13,41 @@ interface IParams {
 
 async function locationRouter(fastify: FastifyInstance, options: RouteOptions) {
   fastify.get<{ Querystring: IQuerystring }>("/locations", (request, reply) => {
-    let text = "SELECT * FROM location ORDER BY random()";
+    let text = "SELECT * FROM location";
+    let values: any[] = [];
 
-    if (request.query.limit) {
-      text += ` limit ${request.query.limit};`;
-    } else {
-      text += ";";
+    if (request.query.location) {
+      const [lat, lon] = request.query.location.split(",");
+      text += " WHERE 100 < spherical_distance(lat, lon, $1, $2)";
+      values = [lat, lon];
+
+      if (request.query.exclude) {
+        const exclude = typeof Array.isArray(request.query.exclude)
+          ? [request.query.exclude]
+          : request.query.exclude;
+
+        text += " AND id != ALL($3::integer[])";
+        values.push(exclude);
+      }
+    } else if (request.query.exclude) {
+      const exclude = typeof Array.isArray(request.query.exclude)
+        ? [request.query.exclude]
+        : request.query.exclude;
+
+      text += " WHERE id != ALL($1::integer[])";
+      values = [exclude];
     }
 
-    fastify.pg.query(text, (err, result) => {
+    text += " ORDER BY random()";
+
+    if (request.query.limit) {
+      text += ` LIMIT $${values.length + 1}`;
+      values.push(request.query.limit);
+    }
+
+    text += ";";
+
+    fastify.pg.query(text, values, (err, result) => {
       reply.send(err || result.rows);
     });
   });
