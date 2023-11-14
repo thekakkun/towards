@@ -4,14 +4,15 @@
   "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "NODE_ENV=development tsc",
-    "serve": "NODE_ENV=development node dist/server.js"
+    "build": "tsc",
+    "serve": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@fastify/postgres": "^5.2.2",
+    "dotenv": "^16.3.1",
     "fastify": "^4.24.3",
     "fastify-plugin": "^4.5.1",
     "pg": "^8.11.3"
