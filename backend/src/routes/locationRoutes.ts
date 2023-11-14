@@ -16,7 +16,7 @@ async function locationRouter(fastify: FastifyInstance, options: RouteOptions) {
   fastify.get<{ Params: IParams }>(
     "/locations/:location",
     async (request, reply) => {
-      const { rows } = await fastify.pg.query(
+      const { rows } = await fastify.pg.query<LocationModel>(
         `SELECT * FROM location WHERE id=${request.params.location}`
       );
 

@@ -13,8 +13,8 @@ async function createAndInsert() {
       city CHARACTER VARYING(128),
       country CHARACTER VARYING(128),
       link CHARACTER VARYING(256),
-      lat NUMERIC(11, 9),
-      lon NUMERIC(12, 9)   
+      lat REAL,
+      lon REAL   
     );
 `);
 
