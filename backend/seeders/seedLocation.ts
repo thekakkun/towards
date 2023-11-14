@@ -4,24 +4,26 @@ import { dbConfig } from "../src/config/database";
 
 const pool = new Pool(dbConfig);
 
-async function createAndInsert() {
+seedLocationTable();
+
+async function seedLocationTable() {
+  // Recreate table
   await pool.query("DROP TABLE IF EXISTS location;");
 
   await pool.query(`
-    CREATE TABLE location (
-      id SERIAL PRIMARY KEY,
-      city CHARACTER VARYING(128),
-      country CHARACTER VARYING(128),
-      link CHARACTER VARYING(256),
-      lat REAL,
-      lon REAL   
-    );
-`);
+  CREATE TABLE location (
+    id SERIAL PRIMARY KEY,
+    city CHARACTER VARYING(128),
+    country CHARACTER VARYING(128),
+    link CHARACTER VARYING(256),
+    lat REAL,
+    lon REAL
+  );`);
 
+  // Insert data
   const text = `
   INSERT INTO location (city, country, link, lat, lon)
-  VALUES ($1, $2, $3, $4, $5);
-`;
+  VALUES ($1, $2, $3, $4, $5);`;
 
   for (const loc of data) {
     await pool.query(text, [
