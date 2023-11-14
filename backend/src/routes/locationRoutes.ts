@@ -24,19 +24,15 @@ async function locationRouter(fastify: FastifyInstance, options: RouteOptions) {
     });
   });
 
-  fastify.get<{ Params: IParams }>(
-    "/locations/:location",
-    async (request, reply) => {
-      const { rows } = await fastify.pg.query<LocationModel>(
-        `SELECT * FROM location WHERE id=${request.params.location}`
-      );
-
-      if (!rows) {
-        throw new Error("Location not found");
+  fastify.get<{ Params: IParams }>("/locations/:location", (request, reply) => {
+    fastify.pg.query<LocationModel>(
+      "SELECT * FROM location WHERE id=$1",
+      [request.params.location],
+      (err, result) => {
+        reply.send(err || result.rows);
       }
-      return rows;
-    }
-  );
+    );
+  });
 }
 
 export default locationRouter;
