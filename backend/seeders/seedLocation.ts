@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { Pool } from "pg";
 import data from "./locations.json";
 import { dbConfig } from "../src/config/database";
@@ -17,13 +18,13 @@ async function seedLocationTable() {
     city CHARACTER VARYING(128),
     country CHARACTER VARYING(128),
     link CHARACTER VARYING(256),
-    lat REAL,
-    lon REAL
+    latitude REAL,
+    longitude REAL
   );`);
 
   // Insert data
   const text = `
-  INSERT INTO location (city, country, link, lat, lon)
+  INSERT INTO location (city, country, link, latitude, longitude)
   VALUES ($1, $2, $3, $4, $5);`;
 
   for (const loc of data) {

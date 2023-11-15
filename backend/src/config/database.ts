@@ -1,4 +1,3 @@
-import "dotenv/config";
 import fastifyPostgres, {
   FastifyPostgresRouteOptions,
 } from "@fastify/postgres";
@@ -10,7 +9,7 @@ export const dbConfig = {
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
-  port: process.env.DB_PASSWORD ? parseInt(process.env.DB_PASSWORD) : undefined,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : undefined,
 };
 
 async function dbConnector(
