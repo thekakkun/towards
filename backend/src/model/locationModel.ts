@@ -3,6 +3,6 @@ export interface LocationModel {
   city: string;
   country: string;
   link: string;
-  lat: number;
-  lon: number;
+  latitude: number;
+  longitude: number;
 }

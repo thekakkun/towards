@@ -17,9 +17,9 @@ async function locationRouter(fastify: FastifyInstance, options: RouteOptions) {
     let values: any[] = [];
 
     if (request.query.location) {
-      const [lat, lon] = request.query.location.split(",");
-      text += " WHERE 100 < spherical_distance(lat, lon, $1, $2)";
-      values = [lat, lon];
+      const [latitude, longitude] = request.query.location.split(",");
+      text += " WHERE 100 < spherical_distance(latitude, longitude, $1, $2)";
+      values = [latitude, longitude];
 
       if (request.query.exclude) {
         const exclude = typeof Array.isArray(request.query.exclude)
